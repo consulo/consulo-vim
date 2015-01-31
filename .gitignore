@@ -1,5 +1,5 @@
 *.swp
-/.idea/
-/idea/
 /out/
 /tmp/
+/.consulo/workspace.xml
+/.consulo/sandbox

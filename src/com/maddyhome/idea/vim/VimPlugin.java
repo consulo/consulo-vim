@@ -40,7 +40,6 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.editor.actionSystem.TypedAction;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.ex.KeymapManagerEx;
 import com.intellij.openapi.keymap.impl.DefaultKeymap;
@@ -77,7 +76,6 @@ import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
     file = "$APP_CONFIG$/vim_settings.xml")})
 public class VimPlugin implements ApplicationComponent, PersistentStateComponent<Element> {
   private static final String IDEAVIM_COMPONENT_NAME = "VimPlugin";
-  private static final String IDEAVIM_PLUGIN_ID = "IdeaVIM";
   public static final String IDEAVIM_NOTIFICATION_ID = "ideavim";
   public static final String IDEAVIM_STICKY_NOTIFICATION_ID = "ideavim-sticky";
   public static final String IDEAVIM_NOTIFICATION_TITLE = "Vim Emulator";
@@ -288,11 +286,6 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
   @NotNull
   public static EditorGroup getEditor() {
     return getInstance().editor;
-  }
-
-  @NotNull
-  public static PluginId getPluginId() {
-    return PluginId.getId(IDEAVIM_PLUGIN_ID);
   }
 
   public static boolean isEnabled() {

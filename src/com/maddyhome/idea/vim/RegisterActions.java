@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
+import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.ex.ActionManagerEx;
 import com.maddyhome.idea.vim.action.VimCommandAction;
@@ -49,7 +50,8 @@ public class RegisterActions
 	private static void registerVimCommandActions()
 	{
 		final ActionManagerEx manager = ActionManagerEx.getInstanceEx();
-		for(String actionId : manager.getPluginActions(VimPlugin.getPluginId()))
+		PluginClassLoader classLoader = (PluginClassLoader) RegisterActions.class.getClassLoader();
+		for(String actionId : manager.getPluginActions(classLoader.getPluginId()))
 		{
 			final AnAction action = manager.getAction(actionId);
 			if(action instanceof VimCommandAction)

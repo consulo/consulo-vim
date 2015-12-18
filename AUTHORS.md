@@ -6,12 +6,12 @@ The original author:
 * [Rick Maddy](mailto:rmaddy@maddyhome.com)
 
 The current maintainer:
-
-* [Andrey Vlasovskikh](mailto:andrey.vlasovskikh@gmail.com)
+* [Valeriy Semenchuk](mailto:vistall.valeriy@gmail.com)
 
 Previous maintainers:
 
 * [Oleg Shpynov](mailto:oleg.shpynov@jetbrains.com)
+* [Andrey Vlasovskikh](mailto:andrey.vlasovskikh@gmail.com)
 
 Contributors:
 

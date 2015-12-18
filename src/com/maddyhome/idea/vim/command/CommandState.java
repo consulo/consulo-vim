@@ -18,20 +18,22 @@
 
 package com.maddyhome.idea.vim.command;
 
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import javax.swing.KeyStroke;
+import javax.swing.Timer;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.editor.Editor;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.helper.EditorData;
 import com.maddyhome.idea.vim.key.ParentNode;
 import com.maddyhome.idea.vim.option.NumberOption;
 import com.maddyhome.idea.vim.option.Options;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 
 public class CommandState {
   public static final int DEFAULT_TIMEOUT_LENGTH = 1000;
@@ -83,6 +85,11 @@ public class CommandState {
   public static boolean inVisualCharacterMode(@Nullable Editor editor) {
     final CommandState state = getInstance(editor);
     return state.getMode() == Mode.VISUAL && state.getSubMode() == SubMode.VISUAL_CHARACTER;
+  }
+
+  public static boolean inVisualBlockMode(@Nullable Editor editor) {
+    final CommandState state = getInstance(editor);
+    return state.getMode() == Mode.VISUAL && state.getSubMode() == SubMode.VISUAL_BLOCK;
   }
 
   @Nullable
@@ -311,7 +318,7 @@ public class CommandState {
     VimPlugin.showMode(msg.toString());
   }
 
-  public static enum Mode {
+  public enum Mode {
     COMMAND,
     INSERT,
     REPLACE,
@@ -320,7 +327,7 @@ public class CommandState {
     EX_ENTRY
   }
 
-  public static enum SubMode {
+  public enum SubMode {
     NONE,
     SINGLE_COMMAND,
     VISUAL_CHARACTER,

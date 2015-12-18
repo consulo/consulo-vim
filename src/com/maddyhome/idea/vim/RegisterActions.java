@@ -17,6 +17,10 @@
  */
 package com.maddyhome.idea.vim;
 
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.ex.ActionManagerEx;
 import com.maddyhome.idea.vim.action.VimCommandAction;
@@ -25,9 +29,6 @@ import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.MappingMode;
 import com.maddyhome.idea.vim.group.KeyGroup;
 import com.maddyhome.idea.vim.key.Shortcut;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 public class RegisterActions {
   /**
@@ -147,6 +148,10 @@ public class RegisterActions {
         new Shortcut("a<"),
         new Shortcut("a>")
       });
+    parser.registerAction(MappingMode.VO, "VimMotionInnerBlockTag", Command.Type.MOTION,
+                          Command.FLAG_MOT_CHARACTERWISE | Command.FLAG_MOT_INCLUSIVE | Command.FLAG_TEXT_BLOCK,
+                          new Shortcut[]{new Shortcut("it")}
+    );
     parser.registerAction(MappingMode.VO, "VimMotionOuterBlockBrace", Command.Type.MOTION,
                           Command.FLAG_MOT_CHARACTERWISE | Command.FLAG_MOT_INCLUSIVE | Command.FLAG_TEXT_BLOCK,
                           new Shortcut[]{new Shortcut("aB"), new Shortcut("a{"), new Shortcut("a}")}
@@ -171,6 +176,10 @@ public class RegisterActions {
                           Command.FLAG_MOT_CHARACTERWISE | Command.FLAG_MOT_INCLUSIVE | Command.FLAG_TEXT_BLOCK, new Shortcut[]{
       new Shortcut("a`"),
     });
+    parser.registerAction(MappingMode.VO, "VimMotionOuterBlockTag", Command.Type.MOTION,
+                          Command.FLAG_MOT_CHARACTERWISE | Command.FLAG_MOT_INCLUSIVE | Command.FLAG_TEXT_BLOCK,
+                          new Shortcut[]{new Shortcut("at")}
+    );
     parser.registerAction(MappingMode.NO, "VimResetMode", Command.Type.RESET, new Shortcut(new KeyStroke[]{
       KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SLASH, KeyEvent.CTRL_MASK),
       KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_MASK)

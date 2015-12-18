@@ -18,10 +18,6 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import gnu.trove.TIntArrayList;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
@@ -34,6 +30,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import gnu.trove.TIntArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PsiHelper {
   public static int findMethodStart(@NotNull Editor editor, int offset, int count) {
@@ -110,7 +109,7 @@ public class PsiHelper {
   }
 
   @Nullable
-  private static PsiFile getFile(@NotNull Editor editor) {
+  public static PsiFile getFile(@NotNull Editor editor) {
     VirtualFile vf = EditorData.getVirtualFile(editor);
     if (vf != null) {
       Project proj = editor.getProject();

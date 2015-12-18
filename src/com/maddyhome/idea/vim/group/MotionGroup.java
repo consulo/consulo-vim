@@ -17,10 +17,27 @@
  */
 package com.maddyhome.idea.vim.group;
 
-import com.intellij.openapi.actionSystem.*;
+import java.awt.event.MouseEvent;
+import java.io.File;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.*;
-import com.intellij.openapi.editor.event.*;
+import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.LogicalPosition;
+import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.editor.VisualPosition;
+import com.intellij.openapi.editor.event.EditorFactoryAdapter;
+import com.intellij.openapi.editor.event.EditorFactoryEvent;
+import com.intellij.openapi.editor.event.EditorMouseEvent;
+import com.intellij.openapi.editor.event.EditorMouseEventArea;
+import com.intellij.openapi.editor.event.EditorMouseListener;
+import com.intellij.openapi.editor.event.EditorMouseMotionListener;
+import com.intellij.openapi.editor.event.SelectionEvent;
+import com.intellij.openapi.editor.event.SelectionListener;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManagerAdapter;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
@@ -34,7 +51,12 @@ import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.action.motion.MotionEditorAction;
 import com.maddyhome.idea.vim.action.motion.TextObjectAction;
-import com.maddyhome.idea.vim.command.*;
+import com.maddyhome.idea.vim.command.Argument;
+import com.maddyhome.idea.vim.command.Command;
+import com.maddyhome.idea.vim.command.CommandState;
+import com.maddyhome.idea.vim.command.MappingMode;
+import com.maddyhome.idea.vim.command.SelectionType;
+import com.maddyhome.idea.vim.command.VisualChange;
 import com.maddyhome.idea.vim.common.Jump;
 import com.maddyhome.idea.vim.common.Mark;
 import com.maddyhome.idea.vim.common.TextRange;
@@ -46,11 +68,6 @@ import com.maddyhome.idea.vim.option.BoundStringOption;
 import com.maddyhome.idea.vim.option.NumberOption;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.event.MouseEvent;
-import java.io.File;
 
 /**
  * This handles all motion related commands and marks
@@ -293,7 +310,10 @@ public class MotionGroup {
   public TextRange getBlockRange(@NotNull Editor editor, int count, boolean isOuter, char type) {
     return SearchHelper.findBlockRange(editor, type, count, isOuter);
   }
-
+  @Nullable
+  public TextRange getBlockTagRange(@NotNull Editor editor, boolean isOuter) {
+    return SearchHelper.findBlockTagRange(editor, isOuter);
+  }
   @NotNull
   public TextRange getSentenceRange(@NotNull Editor editor, int count, boolean isOuter) {
     return SearchHelper.findSentenceRange(editor, count, isOuter);
@@ -1605,34 +1625,17 @@ public class MotionGroup {
 
   @NotNull
   public TextRange getVisualRange(@NotNull Editor editor) {
-    final TextRange res = new TextRange(editor.getSelectionModel().getBlockSelectionStarts(),
-                                        editor.getSelectionModel().getBlockSelectionEnds());
-
-    final CommandState.SubMode subMode = CommandState.getInstance(editor).getSubMode();
-    if (subMode == CommandState.SubMode.VISUAL_BLOCK) {
-      final int[] ends = res.getEndOffsets();
-
-      // If the last left/right motion was the $ command, simulate each line being selected to end-of-line
-      if (EditorData.getLastColumn(editor) >= MotionGroup.LAST_COLUMN) {
-        final int[] starts = res.getStartOffsets();
-        for (int i = 0; i < starts.length; i++) {
-          if (ends[i] > starts[i]) {
-            ends[i] = EditorHelper.getLineEndForOffset(editor, starts[i]);
-          }
-        }
-      }
-      else {
-        for (int i = 0; i < ends.length; ++i) {
-          ends[i] = EditorHelper.normalizeOffset(editor, ends[i] + 1, false);
-        }
-      }
-    }
-    return res;
+    return new TextRange(editor.getSelectionModel().getBlockSelectionStarts(),
+                         editor.getSelectionModel().getBlockSelectionEnds());
   }
 
   @NotNull
   public TextRange getRawVisualRange() {
     return new TextRange(visualStart, visualEnd);
+  }
+
+  public void updateSelection(@NotNull Editor editor) {
+    updateSelection(editor, visualEnd);
   }
 
   private void updateSelection(@NotNull Editor editor, int offset) {
@@ -1665,9 +1668,28 @@ public class MotionGroup {
       editor.getSelectionModel().setSelection(start, end);
     }
     else if (subMode == CommandState.SubMode.VISUAL_BLOCK) {
-      final LogicalPosition lineStart = editor.offsetToLogicalPosition(start);
-      final LogicalPosition lineEnd = editor.offsetToLogicalPosition(end);
-      editor.getSelectionModel().setBlockSelection(lineStart, lineEnd);
+      LogicalPosition blockStart = editor.offsetToLogicalPosition(start);
+      LogicalPosition blockEnd = editor.offsetToLogicalPosition(end);
+      if (blockStart.column < blockEnd.column) {
+        blockEnd = new LogicalPosition(blockEnd.line, blockEnd.column + 1);
+      }
+      else {
+        blockStart = new LogicalPosition(blockStart.line, blockStart.column + 1);
+      }
+      editor.getSelectionModel().setBlockSelection(blockStart, blockEnd);
+
+      for (Caret caret : editor.getCaretModel().getAllCarets()) {
+        int line = caret.getLogicalPosition().line;
+        int lineEndOffset = EditorHelper.getLineEndOffset(editor, line, true);
+
+        if (EditorData.getLastColumn(editor) >= MotionGroup.LAST_COLUMN) {
+          caret.setSelection(caret.getSelectionStart(), lineEndOffset);
+        }
+        if (!EditorHelper.isLineEmpty(editor, line, false)) {
+          caret.moveToOffset(caret.getSelectionEnd() - 1);
+        }
+      }
+      editor.getCaretModel().moveToOffset(end);
     }
 
     VimPlugin.getMark().setVisualSelectionMarks(editor, new TextRange(start, end));

@@ -17,7 +17,19 @@
  */
 package com.maddyhome.idea.vim;
 
-import com.intellij.notification.*;
+import java.awt.Toolkit;
+import java.io.File;
+
+import javax.swing.event.HyperlinkEvent;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.application.ex.ApplicationManagerEx;
@@ -41,19 +53,12 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
 import com.maddyhome.idea.vim.ex.CommandParser;
-import com.maddyhome.idea.vim.ex.VimScriptParser;
+import com.maddyhome.idea.vim.ex.vimscript.VimScriptParser;
 import com.maddyhome.idea.vim.group.*;
 import com.maddyhome.idea.vim.helper.DocumentManager;
 import com.maddyhome.idea.vim.helper.MacKeyRepeat;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
-import java.io.File;
 
 /**
  * This plugin attempts to emulate the key binding and general functionality of Vim and gVim. See the supplied
@@ -75,7 +80,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
   private static final String IDEAVIM_PLUGIN_ID = "IdeaVIM";
   public static final String IDEAVIM_NOTIFICATION_ID = "ideavim";
   public static final String IDEAVIM_STICKY_NOTIFICATION_ID = "ideavim-sticky";
-  public static final String IDEAVIM_NOTIFICATION_TITLE = "IdeaVim";
+  public static final String IDEAVIM_NOTIFICATION_TITLE = "Vim Emulator";
   public static final int STATE_VERSION = 4;
 
   private boolean error = false;
@@ -141,7 +146,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
     });
 
     final TypedAction typedAction = EditorActionManager.getInstance().getTypedAction();
-    EventFacade.getInstance().setupTypedActionHandler(new VimTypedActionHandler(typedAction.getHandler()));
+    EventFacade.getInstance().setupTypedActionHandler(new VimTypedActionHandler(typedAction.getRawHandler()));
 
     // Register vim actions in command mode
     RegisterActions.registerActions();

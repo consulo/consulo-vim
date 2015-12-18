@@ -18,6 +18,17 @@
 
 package com.maddyhome.idea.vim;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import javax.swing.KeyStroke;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -34,19 +45,17 @@ import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.CommandState;
 import com.maddyhome.idea.vim.command.MappingMode;
 import com.maddyhome.idea.vim.group.RegisterGroup;
-import com.maddyhome.idea.vim.helper.*;
-import com.maddyhome.idea.vim.key.*;
+import com.maddyhome.idea.vim.helper.DigraphSequence;
+import com.maddyhome.idea.vim.helper.EditorDataContext;
+import com.maddyhome.idea.vim.helper.EditorHelper;
+import com.maddyhome.idea.vim.helper.RunnableHelper;
+import com.maddyhome.idea.vim.key.ArgumentNode;
+import com.maddyhome.idea.vim.key.BranchNode;
+import com.maddyhome.idea.vim.key.CommandNode;
+import com.maddyhome.idea.vim.key.KeyMapping;
+import com.maddyhome.idea.vim.key.MappingInfo;
+import com.maddyhome.idea.vim.key.Node;
 import com.maddyhome.idea.vim.option.Options;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 
 /**
  * This handlers every keystroke that the user can argType except those that are still valid hotkeys for various Idea
@@ -111,28 +120,28 @@ public class KeyHandler {
     editor = InjectedLanguageUtil.getTopLevelEditor(editor);
     final CommandState editorState = CommandState.getInstance(editor);
 
-    if (allowKeyMappings && handleKeyMapping(editor, key, context)) {
-      return;
-    }
-
-    final boolean isRecording = editorState.isRecording();
-    boolean shouldRecord = true;
     // If this is a "regular" character keystroke, get the character
     char chKey = key.getKeyChar() == KeyEvent.CHAR_UNDEFINED ? 0 : key.getKeyChar();
 
-    if (isEditorReset(key, editorState)) {
-      handleEditorReset(editor, key, context);
-    }
-    // At this point the user must be typing in a command. Most commands can be preceded by a number. Let's
-    // check if a number can be entered at this point, and if so, did the user send us a digit.
-    else if (isCommandCount(editorState, chKey)) {
+    final boolean isRecording = editorState.isRecording();
+    boolean shouldRecord = true;
+
+    // Check for command count before key mappings - otherwise e.g. ':map 0 ^' breaks command counts that contain a zero
+    if (isCommandCount(editorState, chKey)) {
       // Update the count
       count = count * 10 + (chKey - '0');
     }
+    else if (allowKeyMappings && handleKeyMapping(editor, key, context)) {
+      return;
+    }
     // Pressing delete while entering a count "removes" the last digit entered
+    // Unlike the digits, this must be checked *after* checking for key mappings
     else if (isDeleteCommandCount(key, editorState)) {
       // "Remove" the last digit sent to us
       count /= 10;
+    }
+    else if (isEditorReset(key, editorState)) {
+      handleEditorReset(editor, key, context);
     }
     // If we got this far the user is entering a command or supplying an argument to an entered command.
     // First let's check to see if we are at the point of expecting a single character argument to a command.

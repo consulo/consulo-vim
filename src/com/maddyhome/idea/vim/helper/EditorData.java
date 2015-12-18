@@ -18,6 +18,11 @@
 
 package com.maddyhome.idea.vim.helper;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
@@ -25,17 +30,14 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightVirtualFile;
+import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.CommandState;
 import com.maddyhome.idea.vim.command.SelectionType;
 import com.maddyhome.idea.vim.command.VisualChange;
 import com.maddyhome.idea.vim.common.TextRange;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
+import com.maddyhome.idea.vim.group.MotionGroup;
 import com.maddyhome.idea.vim.ui.ExOutputPanel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Field;
-import java.util.Collection;
 
 /**
  * This class is used to manipulate editor specific data. Each editor has a user defined map associated with it.
@@ -57,7 +59,7 @@ public class EditorData {
    *
    * @param editor The editor to cleanup
    */
-  public static void uninitializeEditor(@NotNull Editor editor) {
+  public static void unInitializeEditor(@NotNull Editor editor) {
     if (logger.isDebugEnabled()) logger.debug("editor closed: " + editor);
     editor.putUserData(COMMAND_STATE, null);
     editor.putUserData(LAST_HIGHLIGHTS, null);
@@ -71,7 +73,7 @@ public class EditorData {
   /**
    * This gets the last column the cursor was in for the editor.
    *
-   * @param editor The editr to get the last column from
+   * @param editor The editor to get the last column from
    * @return Returns the last column as set by {@link #setLastColumn} or the current cursor column
    */
   public static int getLastColumn(@NotNull Editor editor) {
@@ -91,9 +93,16 @@ public class EditorData {
    * @param editor The editor
    */
   public static void setLastColumn(@NotNull Editor editor, int col) {
+    boolean previousWasDollar = getLastColumn(editor) >= MotionGroup.LAST_COLUMN;
+    boolean currentIsDollar = col >= MotionGroup.LAST_COLUMN;
+
     editor.putUserData(LAST_COLUMN, col);
     int t = getLastColumn(editor);
     if (logger.isDebugEnabled()) logger.debug("setLastColumn(" + col + ") is now " + t);
+
+    if (previousWasDollar != currentIsDollar && CommandState.inVisualBlockMode(editor)) {
+      VimPlugin.getMotion().updateSelection(editor);
+    }
   }
 
   @Nullable
@@ -276,8 +285,8 @@ public class EditorData {
       // coded such that two keys with the same name are treated as different keys - oh well.
       // This code will work as long as the key I need is the first one in the ConsoleViewImpl.
       Class cvi = Class.forName("com.intellij.execution.impl.ConsoleViewImpl");
-      Field[] flds = cvi.getDeclaredFields();
-      for (Field f : flds) {
+      Field[] fields = cvi.getDeclaredFields();
+      for (Field f : fields) {
         if (f.getType().equals(Key.class)) {
           f.setAccessible(true);
           CONSOLE_VIEW_IN_EDITOR_VIEW = (Key)f.get(null);
@@ -294,7 +303,7 @@ public class EditorData {
   }
 
   /**
-   * Checks if editor is file editor, also it takes into account that editor can be placed in editors hierarhy
+   * Checks if editor is file editor, also it takes into account that editor can be placed in editors hierarchy
    */
   public static boolean isFileEditor(@NotNull Editor editor){
     final VirtualFile virtualFile = EditorData.getVirtualFile(editor);

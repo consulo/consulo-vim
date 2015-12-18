@@ -400,11 +400,11 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
         new Notification(
           VimPlugin.IDEAVIM_STICKY_NOTIFICATION_ID,
           VimPlugin.IDEAVIM_NOTIFICATION_TITLE,
-          String.format("IdeaVim plugin doesn't use the special \"Vim\" keymap any longer. " +
+          String.format("Vim Emulator plugin doesn't use the special \"Vim\" keymap any longer. " +
                         "Switching to \"%s\" keymap.<br/><br/>" +
                         "Now it is possible to set up:<br/>" +
                         "<ul>" +
-                        "<li>Vim keys in your ~/.ideavimrc file using key mapping commands</li>" +
+                        "<li>Vim keys in your ~/.consulovimrc file using key mapping commands</li>" +
                         "<li>IDE action shortcuts in \"File | Settings | Keymap\"</li>" +
                         "<li>Vim or IDE handlers for conflicting shortcuts in <a href='#settings'>Vim Emulation</a> settings</li>" +
                         "</ul>", keymap.getPresentableName()),
@@ -421,8 +421,8 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
         new Notification(
           VimPlugin.IDEAVIM_STICKY_NOTIFICATION_ID,
           VimPlugin.IDEAVIM_NOTIFICATION_TITLE,
-          "The ~/.vimrc file is no longer read by default, use ~/.ideavimrc instead. You can read it from your " +
-          "~/.ideavimrc using this command:<br/><br/>" +
+          "The ~/.vimrc file is no longer read by default, use ~/.consulovimrc instead. You can read it from your " +
+          "~/.consulovimrc using this command:<br/><br/>" +
           "<code>source ~/.vimrc</code>",
           NotificationType.INFORMATION).notify(null);
       }

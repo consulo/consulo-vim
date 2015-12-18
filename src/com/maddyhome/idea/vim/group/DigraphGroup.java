@@ -18,14 +18,14 @@
 
 package com.maddyhome.idea.vim.group;
 
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.helper.EditorHelper;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.TreeMap;
 
 public class DigraphGroup {
   public DigraphGroup() {
@@ -124,7 +124,7 @@ public class DigraphGroup {
       }
     }
 
-    // TODO - load custom digraphs from .ideavimrc
+    // TODO - load custom digraphs from .consulovimrc
   }
 
   @NotNull private final HashMap<String, Character> digraphs = new HashMap<String, Character>(defaultDigraphs.length);

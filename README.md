@@ -41,7 +41,7 @@ shortcuts.
 
 Keyboard shortcut conflicts between the Vim emulation and the IDE can be
 resolved via "File | Settings | Vim Emulation", "File | Settings | Keymap"
-and key mapping commands in your ~/.ideavimrc file.
+and key mapping commands in your ~/.consulovimrc file.
 
 
 Summary of Supported Vim Features
@@ -80,14 +80,14 @@ See also:
 Files
 -----
 
-* ~/.ideavimrc
+* ~/.consulovimrc
     * Your IdeaVim-specific Vim initialization commands
 
-You can read your ~/.vimrc file from ~/.ideavimrc using this command:
+You can read your ~/.vimrc file from ~/.consulovimrc using this command:
 
     source ~/.vimrc
 
-Note, that IdeaVim currently parses ~/.ideavimrc file via simple pattern matching,
+Note, that IdeaVim currently parses ~/.consulovimrc file via simple pattern matching,
 see [VIM-669](http://youtrack.jetbrains.com/issue/VIM-669) for proper parsing
 of VimL files.
 

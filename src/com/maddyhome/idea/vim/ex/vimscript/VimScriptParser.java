@@ -37,7 +37,7 @@ import com.maddyhome.idea.vim.ex.ExException;
  * @author vlan
  */
 public class VimScriptParser {
-  public static final String[] VIMRC_FILES = {".ideavimrc", "_ideavimrc"};
+  public static final String[] VIMRC_FILES = {".consulovimrc", "_consulovimrc"};
   public static final int BUFSIZE = 4096;
   private static final Pattern EOL_SPLIT_PATTERN = Pattern.compile(" *(\r\n|\n)+ *");
   private static final Pattern DOUBLE_QUOTED_STRING = Pattern.compile("\"([^\"]*)\"");

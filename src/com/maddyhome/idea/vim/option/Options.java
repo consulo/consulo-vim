@@ -17,6 +17,14 @@
  */
 package com.maddyhome.idea.vim.option;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.maddyhome.idea.vim.VimPlugin;
@@ -24,10 +32,6 @@ import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.helper.EditorHelper;
 import com.maddyhome.idea.vim.helper.MessageHelper;
 import com.maddyhome.idea.vim.helper.Msg;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * Maintains the set of support options
@@ -139,7 +143,7 @@ public class Options {
    * <li>:set {option}^={value} - prepend or multiply option value</li>
    * </ul>
    *
-   * @param editor    The editor the command was entered for, null if no editor - reading .ideavimrc
+   * @param editor    The editor the command was entered for, null if no editor - reading .consulovimrc
    * @param args      The :set command arguments
    * @param failOnBad True if processing should stop when a bad argument is found, false if a bad argument is simply
    *                  skipped and processing continues.

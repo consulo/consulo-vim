@@ -405,7 +405,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
                         "Now it is possible to set up:<br/>" +
                         "<ul>" +
                         "<li>Vim keys in your ~/.consulovimrc file using key mapping commands</li>" +
-                        "<li>IDE action shortcuts in \"File | Settings | Keymap\"</li>" +
+                        "<li>IDE action shortcuts in \"File | " + ShowSettingsUtil.getSettingsMenuName() + " | Keymap\"</li>" +
                         "<li>Vim or IDE handlers for conflicting shortcuts in <a href='#settings'>Vim Emulation</a> settings</li>" +
                         "</ul>", keymap.getPresentableName()),
           NotificationType.INFORMATION,

@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,12 +80,12 @@ public class RegisterActions
 				KeyStroke.getKeyStroke('g'),
 				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK)
 		}));
-		// TODO - add zC
-		// TODO - add zO
 		parser.registerAction(MappingMode.NV, "CollapseAllRegions", Command.Type.OTHER_READONLY, new Shortcut("zM"));
 		parser.registerAction(MappingMode.NV, "CollapseRegion", Command.Type.OTHER_READONLY, new Shortcut("zc"));
+		parser.registerAction(MappingMode.NV, "CollapseRegionRecursively", Command.Type.OTHER_READONLY, new Shortcut("zC"));
 		parser.registerAction(MappingMode.NV, "ExpandAllRegions", Command.Type.OTHER_READONLY, new Shortcut("zR"));
 		parser.registerAction(MappingMode.NV, "ExpandRegion", Command.Type.OTHER_READONLY, new Shortcut("zo"));
+		parser.registerAction(MappingMode.NV, "ExpandRegionRecursively", Command.Type.OTHER_READONLY, new Shortcut("zO"));
 		parser.registerAction(MappingMode.NV, "VimToggleRecording", Command.Type.OTHER_READONLY, Command.FLAG_NO_ARG_RECORDING, new Shortcut('q'), Argument.Type.CHARACTER);
 
 		// Text Object Actions for Visual and Operator Pending Modes
@@ -487,9 +487,8 @@ public class RegisterActions
 		});
 
 		// Shift Actions
-		// TODO - add =
-		// TODO - == will ignore count and only auto-indent 1 lines
 		parser.registerAction(MappingMode.N, "VimAutoIndentLines", Command.Type.CHANGE, new Shortcut("=="));
+		parser.registerAction(MappingMode.N, "VimAutoIndentMotion", Command.Type.CHANGE, Command.FLAG_OP_PEND, new Shortcut('='), Argument.Type.MOTION);
 		parser.registerAction(MappingMode.N, "VimShiftLeftLines", Command.Type.CHANGE, new Shortcut("<<"));
 		parser.registerAction(MappingMode.N, "VimShiftLeftMotion", Command.Type.CHANGE, Command.FLAG_OP_PEND, new Shortcut('<'), Argument.Type.MOTION);
 		parser.registerAction(MappingMode.N, "VimShiftRightLines", Command.Type.CHANGE, new Shortcut(">>"));

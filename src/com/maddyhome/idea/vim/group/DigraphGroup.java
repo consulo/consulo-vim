@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@
 
 package com.maddyhome.idea.vim.group;
 
-import java.util.HashMap;
-import java.util.TreeMap;
-
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.helper.EditorHelper;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.TreeMap;
 
 public class DigraphGroup {
   public DigraphGroup() {
@@ -124,7 +124,7 @@ public class DigraphGroup {
       }
     }
 
-    // TODO - load custom digraphs from .consulovimrc
+    // TODO - load custom digraphs from .ideavimrc
   }
 
   @NotNull private final HashMap<String, Character> digraphs = new HashMap<String, Character>(defaultDigraphs.length);

@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,14 +64,16 @@ public class MacKeyRepeat {
       final String arg = value ? "0" : "1";
       command = String.format(FMT, "write") + " " + arg;
     }
-    final Process process;
     try {
-      process = Runtime.getRuntime().exec(command);
-      process.waitFor();
+      final Runtime runtime = Runtime.getRuntime();
+      final Process defaults = runtime.exec(command);
+      defaults.waitFor();
+      final Process restartSystemUI = runtime.exec("launchctl stop com.apple.SystemUIServer.agent");
+      restartSystemUI.waitFor();
     }
-    catch (IOException e) {
+    catch (IOException ignored) {
     }
-    catch (InterruptedException e) {
+    catch (InterruptedException ignored) {
     }
   }
 

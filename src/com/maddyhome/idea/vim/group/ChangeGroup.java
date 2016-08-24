@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -335,7 +335,7 @@ public class ChangeGroup {
     CommandState state = CommandState.getInstance(editor);
 
     insertStart = editor.getCaretModel().getOffset();
-    VimPlugin.getMark().setMark(editor, '[', insertStart);
+    VimPlugin.getMark().setMark(editor, MarkGroup.MARK_CHANGE_START, insertStart);
 
     // If we are repeating the last insert/replace
     final Command cmd = state.getCommand();
@@ -538,8 +538,8 @@ public class ChangeGroup {
     final MarkGroup markGroup = VimPlugin.getMark();
     final int offset = editor.getCaretModel().getOffset();
     markGroup.setMark(editor, '^', offset);
-    markGroup.setMark(editor, ']', offset);
-    markGroup.setMark(editor, '.', offset);
+    markGroup.setMark(editor, MarkGroup.MARK_CHANGE_END, offset);
+    markGroup.setMark(editor, MarkGroup.MARK_CHANGE_POS, offset);
     CommandState.getInstance(editor).popState();
 
     if (!CommandState.inInsertMode(editor)) {
@@ -1305,8 +1305,35 @@ public class ChangeGroup {
     replaceText(editor, start, end, sb.toString());
   }
 
-  public void autoIndentLines(@NotNull DataContext context) {
+  public void autoIndentLines(@NotNull Editor editor, @NotNull DataContext context, int lines) {
+    CaretModel caretModel = editor.getCaretModel();
+    int startLine = caretModel.getLogicalPosition().line;
+    int endLine = startLine + lines - 1;
+
+    if (endLine <= EditorHelper.getLineCount(editor)) {
+      TextRange textRange = new TextRange(caretModel.getOffset(), editor.getDocument().getLineEndOffset(endLine));
+      autoIndentRange(editor, context, textRange);
+    }
+  }
+
+  public void autoIndentMotion(@NotNull Editor editor, @NotNull DataContext context, int count, int rawCount,
+                               @NotNull Argument argument) {
+    TextRange range = MotionGroup.getMotionRange(editor, context, count, rawCount, argument, false);
+    if (range != null) {
+      autoIndentRange(editor, context, range);
+    }
+  }
+
+  public void autoIndentRange(@NotNull Editor editor, @NotNull DataContext context, @NotNull TextRange range) {
+    int startLineOffset = EditorHelper.getLineStartForOffset(editor, range.getStartOffset());
+    int endLineOffset = EditorHelper.getLineEndForOffset(editor, range.getEndOffset());
+    editor.getSelectionModel().setSelection(startLineOffset, endLineOffset);
+
     KeyHandler.executeAction("AutoIndentLines", context);
+
+    int firstLine = editor.offsetToLogicalPosition(Math.min(startLineOffset, endLineOffset)).line;
+    int newOffset = VimPlugin.getMotion().moveCaretToLineStartSkipLeading(editor, firstLine);
+    MotionGroup.moveCaret(editor, newOffset);
   }
 
   public void reformatCode(@NotNull DataContext context) {
@@ -1456,7 +1483,7 @@ public class ChangeGroup {
     editor.getDocument().insertString(start, str);
     editor.getCaretModel().moveToOffset(start + str.length());
 
-    VimPlugin.getMark().setMark(editor, '.', start);
+    VimPlugin.getMark().setMark(editor, MarkGroup.MARK_CHANGE_POS, start);
   }
 
   /**
@@ -1484,9 +1511,8 @@ public class ChangeGroup {
 
       if (type != null) {
         int start = range.getStartOffset();
-        VimPlugin.getMark().setMark(editor, '.', start);
-        VimPlugin.getMark().setMark(editor, '[', start);
-        VimPlugin.getMark().setMark(editor, ']', start);
+        VimPlugin.getMark().setMark(editor, MarkGroup.MARK_CHANGE_POS, start);
+        VimPlugin.getMark().setChangeMarks(editor, new TextRange(start, start));
       }
 
       return true;
@@ -1506,9 +1532,9 @@ public class ChangeGroup {
   private void replaceText(@NotNull Editor editor, int start, int end, @NotNull String str) {
     editor.getDocument().replaceString(start, end, str);
 
-    VimPlugin.getMark().setMark(editor, '[', start);
-    VimPlugin.getMark().setMark(editor, ']', start + str.length());
-    VimPlugin.getMark().setMark(editor, '.', start + str.length());
+    final int newEnd = start + str.length();
+    VimPlugin.getMark().setChangeMarks(editor, new TextRange(start, newEnd));
+    VimPlugin.getMark().setMark(editor, MarkGroup.MARK_CHANGE_POS, newEnd);
   }
 
   /**

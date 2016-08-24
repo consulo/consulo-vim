@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,21 +17,19 @@
  */
 package com.maddyhome.idea.vim.option;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.StringTokenizer;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.extensions.Extensions;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
+import com.maddyhome.idea.vim.extension.VimExtension;
 import com.maddyhome.idea.vim.helper.EditorHelper;
 import com.maddyhome.idea.vim.helper.MessageHelper;
 import com.maddyhome.idea.vim.helper.Msg;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 /**
  * Maintains the set of support options
@@ -40,6 +38,9 @@ public class Options {
   public static final String RELATIVE_NUMBER = "relativenumber";
   public static final String NUMBER = "number";
   public static final String CLIPBOARD = "clipboard";
+  public static final String INCREMENTAL_SEARCH = "incsearch";
+  public static final String TIMEOUT = "timeout";
+  public static final String VIMINFO = "viminfo";
 
   /**
    * Gets the singleton instance of the options
@@ -143,7 +144,7 @@ public class Options {
    * <li>:set {option}^={value} - prepend or multiply option value</li>
    * </ul>
    *
-   * @param editor    The editor the command was entered for, null if no editor - reading .consulovimrc
+   * @param editor    The editor the command was entered for, null if no editor - reading .ideavimrc
    * @param args      The :set command arguments
    * @param failOnBad True if processing should stop when a bad argument is found, false if a bad argument is simply
    *                  skipped and processing continues.
@@ -467,6 +468,35 @@ public class Options {
     addOption(new ToggleOption(NUMBER, "nu", false));
     addOption(new ToggleOption(RELATIVE_NUMBER, "rnu", false));
     addOption(new ListOption(CLIPBOARD, "cb", new String[]{"autoselect,exclude:cons\\|linux"}, null));
+    addOption(new ToggleOption(INCREMENTAL_SEARCH, "is", false));
+    addOption(new ToggleOption(TIMEOUT, "to", true));
+    addOption(new ListOption(VIMINFO, "vi", new String[]{"'100", "<50", "s10", "h"}, null));
+
+    registerExtensionOptions();
+  }
+
+  private void registerExtensionOptions() {
+    for (VimExtension extension : Extensions.getExtensions(VimExtension.EP_NAME)) {
+      final String name = extension.getName();
+      final ToggleOption option = new ToggleOption(name, name, false);
+      option.addOptionChangeListener(new OptionChangeListener() {
+        @Override
+        public void valueChange(OptionChangeEvent event) {
+          for (VimExtension extension : Extensions.getExtensions(VimExtension.EP_NAME)) {
+            if (name.equals(extension.getName())) {
+              if (Options.getInstance().isSet(name)) {
+                extension.init();
+                logger.info("IdeaVim extension '" + name + "' initialized");
+              }
+              else {
+                extension.dispose();
+              }
+            }
+          }
+        }
+      });
+      addOption(option);
+    }
   }
 
   private void addOption(@NotNull Option option) {

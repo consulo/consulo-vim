@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,6 +87,14 @@
  * |CTRL-W_CTRL-W|          ...
  * |CTRL-W_z|               TODO
  * |CTRL-W_bar|             TODO
+ *
+ *
+ * 2.4. Commands starting with 'g'
+ *
+ * tag                      action
+ * ---------------------------------------------------------------------------------------------------------------------
+ *
+ * |g@|                     {@link com.maddyhome.idea.vim.action.change.OperatorAction}
  *
  *
  * 3. Visual mode

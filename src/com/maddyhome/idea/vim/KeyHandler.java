@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,6 @@
 
 package com.maddyhome.idea.vim;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
-import javax.swing.KeyStroke;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -44,18 +33,21 @@ import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.CommandState;
 import com.maddyhome.idea.vim.command.MappingMode;
+import com.maddyhome.idea.vim.extension.VimExtensionHandler;
 import com.maddyhome.idea.vim.group.RegisterGroup;
-import com.maddyhome.idea.vim.helper.DigraphSequence;
-import com.maddyhome.idea.vim.helper.EditorDataContext;
-import com.maddyhome.idea.vim.helper.EditorHelper;
-import com.maddyhome.idea.vim.helper.RunnableHelper;
-import com.maddyhome.idea.vim.key.ArgumentNode;
-import com.maddyhome.idea.vim.key.BranchNode;
-import com.maddyhome.idea.vim.key.CommandNode;
-import com.maddyhome.idea.vim.key.KeyMapping;
-import com.maddyhome.idea.vim.key.MappingInfo;
-import com.maddyhome.idea.vim.key.Node;
+import com.maddyhome.idea.vim.helper.*;
+import com.maddyhome.idea.vim.key.*;
 import com.maddyhome.idea.vim.option.Options;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * This handlers every keystroke that the user can argType except those that are still valid hotkeys for various Idea
@@ -225,7 +217,7 @@ public class KeyHandler {
     }
   }
 
-  private boolean handleKeyMapping(@NotNull final Editor editor, @NotNull KeyStroke key,
+  private boolean handleKeyMapping(@NotNull final Editor editor, @NotNull final KeyStroke key,
                                    @NotNull final DataContext context) {
     final CommandState commandState = CommandState.getInstance(editor);
     commandState.stopMappingTimer();
@@ -240,33 +232,57 @@ public class KeyHandler {
     }
 
     final KeyMapping mapping = VimPlugin.getKey().getKeyMapping(mappingMode);
-    final MappingInfo mappingInfo = mapping.get(fromKeys);
+    final MappingInfo currentMappingInfo = mapping.get(fromKeys);
+    final MappingInfo prevMappingInfo = mapping.get(mappingKeys);
+    final MappingInfo mappingInfo = currentMappingInfo != null ? currentMappingInfo : prevMappingInfo;
+
+    final Application application = ApplicationManager.getApplication();
 
     if (mapping.isPrefix(fromKeys)) {
       mappingKeys.add(key);
-      commandState.startMappingTimer(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-          mappingKeys.clear();
-          for (KeyStroke keyStroke : fromKeys) {
-            handleKey(editor, keyStroke, new EditorDataContext(editor), false);
+      if (!application.isUnitTestMode() && Options.getInstance().isSet(Options.TIMEOUT)) {
+        commandState.startMappingTimer(new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent actionEvent) {
+            mappingKeys.clear();
+            for (KeyStroke keyStroke : fromKeys) {
+              handleKey(editor, keyStroke, new EditorDataContext(editor), false);
+            }
           }
-        }
-      });
+        });
+      }
       return true;
     }
     else if (mappingInfo != null) {
       mappingKeys.clear();
-      final Application application = ApplicationManager.getApplication();
       final Runnable handleMappedKeys = new Runnable() {
         @Override
         public void run() {
-          final boolean fromIsPrefix = isPrefix(mappingInfo.getFromKeys(), mappingInfo.getToKeys());
-          boolean first = true;
-          for (KeyStroke keyStroke : mappingInfo.getToKeys()) {
-            final boolean recursive = mappingInfo.isRecursive() && !(first && fromIsPrefix);
-            handleKey(editor, keyStroke, new EditorDataContext(editor), recursive);
-            first = false;
+          if (editor.isDisposed()) {
+            return;
+          }
+          final List<KeyStroke> toKeys = mappingInfo.getToKeys();
+          final VimExtensionHandler extensionHandler = mappingInfo.getExtensionHandler();
+          final EditorDataContext currentContext = new EditorDataContext(editor);
+          if (toKeys != null) {
+            final boolean fromIsPrefix = isPrefix(mappingInfo.getFromKeys(), toKeys);
+            boolean first = true;
+            for (KeyStroke keyStroke : toKeys) {
+              final boolean recursive = mappingInfo.isRecursive() && !(first && fromIsPrefix);
+              handleKey(editor, keyStroke, currentContext, recursive);
+              first = false;
+            }
+          }
+          else if (extensionHandler != null) {
+            RunnableHelper.runWriteCommand(editor.getProject(), new Runnable() {
+              @Override
+              public void run() {
+                extensionHandler.execute(editor, context);
+              }
+            }, "Vim " + extensionHandler.getClass().getSimpleName(), null);
+          }
+          if (prevMappingInfo != null) {
+            handleKey(editor, key, currentContext);
           }
         }
       };
@@ -333,9 +349,7 @@ public class KeyHandler {
 
   private boolean isEditorReset(@NotNull KeyStroke key, @NotNull CommandState editorState) {
     return (editorState.getMode() == CommandState.Mode.COMMAND || state == State.COMMAND) &&
-           (key.getKeyCode() == KeyEvent.VK_ESCAPE ||
-            (key.getKeyCode() == KeyEvent.VK_C && (key.getModifiers() & KeyEvent.CTRL_MASK) != 0) ||
-            (key.getKeyCode() == '[' && (key.getModifiers() & KeyEvent.CTRL_MASK) != 0));
+           StringHelper.isCloseKeyStroke(key);
   }
 
   private void handleCharArgument(@NotNull KeyStroke key, char chKey) {

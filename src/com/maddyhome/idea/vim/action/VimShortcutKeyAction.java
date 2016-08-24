@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,6 +86,7 @@ public class VimShortcutKeyAction extends AnAction implements DumbAware {
     .build();
 
   private static final Logger ourLogger = Logger.getInstance(VimShortcutKeyAction.class.getName());
+  private static AnAction ourInstance = null;
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
@@ -119,7 +120,11 @@ public class VimShortcutKeyAction extends AnAction implements DumbAware {
 
   @NotNull
   public static AnAction getInstance() {
-    return ActionManager.getInstance().getAction(ACTION_ID);
+    if (ourInstance == null) {
+      final AnAction originalAction = ActionManager.getInstance().getAction(ACTION_ID);
+      ourInstance = EmptyAction.wrap(originalAction);
+    }
+    return ourInstance;
   }
 
   private void notifyAboutShortcutConflict(@NotNull final KeyStroke keyStroke) {

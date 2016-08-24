@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,6 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 import com.intellij.lang.CodeDocumentationAwareCommenter;
 import com.intellij.lang.Commenter;
@@ -42,6 +36,12 @@ import com.maddyhome.idea.vim.option.ListOption;
 import com.maddyhome.idea.vim.option.OptionChangeEvent;
 import com.maddyhome.idea.vim.option.OptionChangeListener;
 import com.maddyhome.idea.vim.option.Options;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Helper methods for searching text
@@ -412,7 +412,7 @@ public class SearchHelper {
       openBracketPos = closeBracketPos - 1;
       while (openBracketPos >= 0) {
         openBracketPos = StringUtil.lastIndexOf(sequence, '<', 0, openBracketPos);
-        if (openBracketPos + 1 < sequence.length() && sequence.charAt(openBracketPos + 1) == '/') {
+        if (openBracketPos >= 0 && openBracketPos + 1 < sequence.length() && sequence.charAt(openBracketPos + 1) == '/') {
           final String tagName = String.valueOf(sequence.subSequence(openBracketPos + "</".length(), closeBracketPos));
           if (tagName.length() > 0 && tagName.charAt(0) != ' ') {
             TextRange textRange = new TextRange(openBracketPos, closeBracketPos);

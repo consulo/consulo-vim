@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,31 +18,32 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import static java.awt.event.KeyEvent.*;
-import static javax.swing.KeyStroke.getKeyStroke;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.KeyStroke;
-
-import org.apache.commons.codec.binary.Base64;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.intellij.openapi.util.text.StringUtil;
 import com.maddyhome.idea.vim.ex.vimscript.VimScriptGlobalEnvironment;
+import org.apache.commons.codec.binary.Base64;
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.*;
+
+import static java.awt.event.KeyEvent.*;
+import static javax.swing.KeyStroke.getKeyStroke;
 
 public class StringHelper {
   private static final String META_PREFIX = "m-";
   private static final String ALT_PREFIX = "a-";
   private static final String CTRL_PREFIX = "c-";
   private static final String SHIFT_PREFIX = "s-";
+
+  /**
+   * Fake key for <Plug> mappings
+   */
+  private static final int VK_PLUG = KeyEvent.CHAR_UNDEFINED - 1;
 
   private static final Map<String, Integer> VIM_KEY_NAMES = ImmutableMap.<String, Integer>builder()
     .put("cr", VK_ENTER)
@@ -76,6 +77,7 @@ public class StringHelper {
     .put("f10", VK_F10)
     .put("f11", VK_F11)
     .put("f12", VK_F12)
+    .put("plug", VK_PLUG)
     .build();
   private static final Map<Integer, String> VIM_KEY_VALUES = invertMap(VIM_KEY_NAMES);
 
@@ -190,7 +192,7 @@ public class StringHelper {
               state = KeyParserState.INIT;
               final String specialKeyName = specialKeyBuilder.toString();
               final String lower = specialKeyName.toLowerCase();
-              if ("plug".equals(lower) || "sid".equals(lower)) {
+              if ("sid".equals(lower)) {
                 throw new IllegalArgumentException("<" + specialKeyName + "> is not supported");
               }
               if (!"nop".equals(lower)) {
@@ -317,6 +319,13 @@ public class StringHelper {
     }
 
     return false;
+  }
+
+  public static boolean isCloseKeyStroke(@NotNull KeyStroke key) {
+    return key.getKeyCode() == VK_ESCAPE ||
+           key.getKeyChar() == VK_ESCAPE ||
+           key.getKeyCode() == VK_C && (key.getModifiers() & CTRL_MASK) != 0 ||
+           key.getKeyCode() == '[' && (key.getModifiers() & CTRL_MASK) != 0;
   }
 
   /**

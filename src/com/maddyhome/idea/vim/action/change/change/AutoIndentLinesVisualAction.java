@@ -1,6 +1,6 @@
 /*
  * IdeaVim - Vim emulator for IDEs based on the IntelliJ platform
- * Copyright (C) 2003-2014 The IdeaVim authors
+ * Copyright (C) 2003-2016 The IdeaVim authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class AutoIndentLinesVisualAction extends VimCommandAction {
                                 @NotNull DataContext context,
                                 @NotNull Command cmd,
                                 @NotNull TextRange range) {
-        VimPlugin.getChange().autoIndentLines(context);
+        VimPlugin.getChange().autoIndentRange(editor, context, range);
         return true;
       }
     });

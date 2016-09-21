@@ -25,7 +25,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  * @author vlan
  */
 public interface VimExtension {
-  @NotNull ExtensionPointName<VimExtension> EP_NAME = ExtensionPointName.create("org.mustbe.consulo.vim.vimExtension");
+  @NotNull ExtensionPointName<VimExtension> EP_NAME = ExtensionPointName.create("consulo.vim.vimExtension");
 
   @NotNull
   String getName();

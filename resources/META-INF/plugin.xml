@@ -1,5 +1,5 @@
 <idea-plugin>
-	<id>org.mustbe.consulo.vim</id>
+	<id>consulo.vim</id>
 	<name>Vim Emulator</name>
 	<description>
 		<![CDATA[
@@ -24,7 +24,7 @@
 		<applicationConfigurable instance="com.maddyhome.idea.vim.ui.VimEmulationConfigurable"/>
 	</extensions>
 
-	<extensions defaultExtensionNs="org.mustbe.consulo.vim">
+	<extensions defaultExtensionNs="consulo.vim">
 		<vimExtension implementation="com.maddyhome.idea.vim.extension.surround.VimSurroundExtension"/>
 	</extensions>
 

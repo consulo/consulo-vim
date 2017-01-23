@@ -39,6 +39,7 @@ import com.intellij.openapi.actionSystem.KeyboardShortcut;
 import com.intellij.openapi.actionSystem.ShortcutSet;
 import com.intellij.openapi.actionSystem.ex.ActionManagerEx;
 import com.intellij.openapi.actionSystem.ex.ActionUtil;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.keymap.Keymap;
@@ -55,14 +56,14 @@ import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.extension.VimExtensionHandler;
 import com.maddyhome.idea.vim.helper.StringHelper;
 import com.maddyhome.idea.vim.key.*;
-import consulo.lombok.annotations.Logger;
 
 /**
  * @author vlan
  */
-@Logger
 public class KeyGroup
 {
+	private static final Logger LOGGER = Logger.getInstance(KeyGroup.class);
+
 	public static final String SHORTCUT_CONFLICTS_ELEMENT = "shortcut-conflicts";
 	public static final String SHORTCUT_CONFLICT_ELEMENT = "shortcut-conflict";
 	public static final String OWNER_ATTRIBUTE = "owner";

@@ -67,11 +67,7 @@ import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
  *
  * @version 0.1
  */
-@State(
-  name = "VimSettings",
-  storages = {@Storage(
-    id = "main",
-    file = "$APP_CONFIG$/vim_settings.xml")})
+@State(name = "VimSettings", storages = @Storage("vim_settings.xml"))
 public class VimPlugin implements ApplicationComponent, PersistentStateComponent<Element> {
   private static final String IDEAVIM_COMPONENT_NAME = "VimPlugin";
   public static final String IDEAVIM_NOTIFICATION_ID = "ideavim";

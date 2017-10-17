@@ -18,6 +18,19 @@
 
 package com.maddyhome.idea.vim.group;
 
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.swing.SwingConstants;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
@@ -26,13 +39,6 @@ import com.intellij.openapi.fileEditor.impl.EditorWithProviderComposite;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.maddyhome.idea.vim.VimPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 public class WindowGroup {
   public WindowGroup() {
@@ -142,12 +148,12 @@ public class WindowGroup {
 
   @NotNull
   private static FileEditorManagerEx getFileEditorManager(@NotNull DataContext context) {
-    final Project project = PlatformDataKeys.PROJECT.getData(context);
+    final Project project = context.getData(PlatformDataKeys.PROJECT);
     return FileEditorManagerEx.getInstanceEx(project);
   }
 
   private void splitWindow(int orientation, @NotNull DataContext context, @NotNull String filename) {
-    final Project project = PlatformDataKeys.PROJECT.getData(context);
+    final Project project = context.getData(PlatformDataKeys.PROJECT);
     final FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
 
     VirtualFile virtualFile = null;

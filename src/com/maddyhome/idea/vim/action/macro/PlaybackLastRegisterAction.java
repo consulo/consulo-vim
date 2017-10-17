@@ -18,6 +18,7 @@
 
 package com.maddyhome.idea.vim.action.macro;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
@@ -26,7 +27,6 @@ import com.intellij.openapi.project.Project;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.handler.EditorActionHandlerBase;
-import org.jetbrains.annotations.NotNull;
 
 /**
  */
@@ -37,7 +37,7 @@ public class PlaybackLastRegisterAction extends EditorAction {
 
   private static class Handler extends EditorActionHandlerBase {
     protected boolean execute(@NotNull Editor editor, @NotNull DataContext context, @NotNull Command cmd) {
-      final Project project = PlatformDataKeys.PROJECT.getData(context);
+      final Project project = context.getData(PlatformDataKeys.PROJECT);
       return VimPlugin.getMacro().playbackLastRegister(editor, context, project, cmd.getCount());
     }
   }

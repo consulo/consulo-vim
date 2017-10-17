@@ -18,6 +18,7 @@
 
 package com.maddyhome.idea.vim.action.macro;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
@@ -27,7 +28,6 @@ import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.handler.EditorActionHandlerBase;
-import org.jetbrains.annotations.NotNull;
 
 /**
  */
@@ -43,7 +43,7 @@ public class PlaybackRegisterAction extends EditorAction {
         return false;
       }
       final char reg = argument.getCharacter();
-      final Project project = PlatformDataKeys.PROJECT.getData(context);
+      final Project project = context.getData(PlatformDataKeys.PROJECT);
       return VimPlugin.getMacro().playbackRegister(editor, context, project, reg, cmd.getCount());
     }
   }

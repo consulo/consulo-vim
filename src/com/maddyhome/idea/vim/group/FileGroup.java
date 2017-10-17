@@ -61,7 +61,7 @@ public class FileGroup {
     if (logger.isDebugEnabled()) {
       logger.debug("openFile(" + filename + ")");
     }
-    Project proj = PlatformDataKeys.PROJECT.getData(context); // API change - don't merge
+    Project proj = context.getData(PlatformDataKeys.PROJECT);
 
     VirtualFile found = findFile(filename, proj);
 
@@ -156,7 +156,7 @@ public class FileGroup {
    * @param context The data context
    */
   public void closeFile(@NotNull Editor editor, @NotNull DataContext context) {
-    final Project project = PlatformDataKeys.PROJECT.getData(context);
+    final Project project = context.getData(PlatformDataKeys.PROJECT);
     if (project != null) {
       final FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
       final EditorWindow window = fileEditorManager.getCurrentWindow();
@@ -230,7 +230,7 @@ public class FileGroup {
    * @param context
    */
   public boolean selectFile(int count, @NotNull DataContext context) {
-    Project proj = PlatformDataKeys.PROJECT.getData(context);
+    Project proj = context.getData(PlatformDataKeys.PROJECT);
     FileEditorManager fem = FileEditorManager.getInstance(proj); // API change - don't merge
     VirtualFile[] editors = fem.getOpenFiles();
     if (count == 99) {
@@ -252,7 +252,7 @@ public class FileGroup {
    * @param context
    */
   public void selectNextFile(int count, @NotNull DataContext context) {
-    Project proj = PlatformDataKeys.PROJECT.getData(context);
+    Project proj = context.getData(PlatformDataKeys.PROJECT);
     FileEditorManager fem = FileEditorManager.getInstance(proj); // API change - don't merge
     VirtualFile[] editors = fem.getOpenFiles();
     VirtualFile current = fem.getSelectedFiles()[0];
@@ -269,7 +269,7 @@ public class FileGroup {
    * Selects previous editor tab
    */
   public void selectPreviousTab(@NotNull DataContext context) {
-    Project proj = PlatformDataKeys.PROJECT.getData(context);
+    Project proj = context.getData(PlatformDataKeys.PROJECT);
     FileEditorManager fem = FileEditorManager.getInstance(proj); // API change - don't merge
     VirtualFile vf = lastSelections.get(fem);
     if (vf != null) {

@@ -18,9 +18,11 @@
 
 package com.maddyhome.idea.vim.helper;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.Key;
 
 public class EditorDataContext implements DataContext {
   public EditorDataContext(Editor editor) {
@@ -34,15 +36,16 @@ public class EditorDataContext implements DataContext {
    * @param dataId the data identifier for which the value is requested.
    * @return the value, or null if no value is available in the current context for this identifier.
    */
-  public Object getData(String dataId) {
-    if (PlatformDataKeys.EDITOR.getName().equals(dataId)) {
-      return editor;
+  @SuppressWarnings("unchecked")
+  public <T> T getData(@NotNull Key<T> dataId) {
+    if (PlatformDataKeys.EDITOR == dataId) {
+      return (T) editor;
     }
-    else if (PlatformDataKeys.PROJECT.getName().equals(dataId)) {
-      return editor.getProject();
+    else if (PlatformDataKeys.PROJECT == dataId) {
+      return (T) editor.getProject();
     }
-    else if (PlatformDataKeys.VIRTUAL_FILE.getName().equals(dataId)) {
-      return EditorData.getVirtualFile(editor);
+    else if (PlatformDataKeys.VIRTUAL_FILE == dataId) {
+      return (T) EditorData.getVirtualFile(editor);
     }
 
     return null;

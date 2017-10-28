@@ -43,8 +43,8 @@ import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManagerAdapter;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.TextEditor;
+import com.intellij.openapi.fileEditor.impl.DesktopEditorWindow;
 import com.intellij.openapi.fileEditor.impl.EditorTabbedContainer;
-import com.intellij.openapi.fileEditor.impl.EditorWindow;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.maddyhome.idea.vim.EventFacade;
@@ -69,6 +69,7 @@ import com.maddyhome.idea.vim.option.BoundStringOption;
 import com.maddyhome.idea.vim.option.NumberOption;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
+import consulo.fileEditor.impl.EditorWindow;
 
 /**
  * This handles all motion related commands and marks
@@ -1270,7 +1271,7 @@ public class MotionGroup {
    */
    private void switchEditorTab(@Nullable EditorWindow editorWindow, int value, boolean absolute) {
     if (editorWindow != null) {
-      final EditorTabbedContainer tabbedPane = editorWindow.getTabbedPane();
+      final EditorTabbedContainer tabbedPane = ((DesktopEditorWindow)editorWindow).getTabbedPane();
       if (tabbedPane != null) {
         if (absolute) {
           tabbedPane.setSelectedIndex(value);

@@ -1,5 +1,4 @@
-*.swp
-/out/
-/tmp/
-/.consulo/workspace.xml
-/.consulo/sandbox
+/.consulo
+!/.consulo/codeStyleSettings.xml
+/out
+/target

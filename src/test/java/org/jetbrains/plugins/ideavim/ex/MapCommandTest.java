@@ -1,11 +1,11 @@
 package org.jetbrains.plugins.ideavim.ex;
 
-import com.maddyhome.idea.vim.command.CommandState;
-import com.maddyhome.idea.vim.ex.VimScriptParser;
-import org.jetbrains.plugins.ideavim.VimTestCase;
-
 import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 import static com.maddyhome.idea.vim.helper.StringHelper.stringToKeys;
+
+import org.jetbrains.plugins.ideavim.VimTestCase;
+import com.maddyhome.idea.vim.command.CommandState;
+import com.maddyhome.idea.vim.ex.vimscript.VimScriptParser;
 
 /**
  * @author vlan

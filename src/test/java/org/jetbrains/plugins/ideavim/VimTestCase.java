@@ -1,13 +1,18 @@
 package org.jetbrains.plugins.ideavim;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.KeyStroke;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.PlatformTestCase;
+import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
@@ -23,12 +28,6 @@ import com.maddyhome.idea.vim.helper.RunnableHelper;
 import com.maddyhome.idea.vim.helper.StringHelper;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author vlan
@@ -38,17 +37,13 @@ public abstract class VimTestCase extends UsefulTestCase {
   protected CodeInsightTestFixture myFixture;
 
   public VimTestCase() {
-    // Only in IntelliJ IDEA Ultimate Edition
-    PlatformTestCase.initPlatformLangPrefix();
-    // XXX: IntelliJ IDEA Community and Ultimate 12+
-    //PlatformTestCase.initPlatformPrefix(ULTIMATE_MARKER_CLASS, "PlatformLangXml");
   }
 
   @Override
   protected void setUp() throws Exception {
     super.setUp();
     final IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
-    final LightProjectDescriptor projectDescriptor = LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR;
+    final TestModuleDescriptor projectDescriptor = TestModuleDescriptor.EMPTY;
     final TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder = factory.createLightFixtureBuilder(projectDescriptor);
     final IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
     myFixture = IdeaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(fixture,
@@ -86,7 +81,7 @@ public abstract class VimTestCase extends UsefulTestCase {
 
   @NotNull
   protected Editor configureByJavaText(@NotNull String content) {
-    myFixture.configureByText(JavaFileType.INSTANCE, content);
+    myFixture.configureByText(PlainTextFileType.INSTANCE, content);
     return myFixture.getEditor();
   }
 

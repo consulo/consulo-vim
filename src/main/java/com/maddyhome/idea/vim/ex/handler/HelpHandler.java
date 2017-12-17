@@ -18,17 +18,17 @@
 
 package com.maddyhome.idea.vim.ex.handler;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.maddyhome.idea.vim.ex.CommandHandler;
 import com.maddyhome.idea.vim.ex.ExCommand;
 import com.maddyhome.idea.vim.ex.ExException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 /**
  * @author vlan
@@ -44,7 +44,7 @@ public class HelpHandler extends CommandHandler {
 
   public boolean execute(@NotNull Editor editor, @NotNull DataContext context, @NotNull ExCommand cmd) throws ExException {
     final String key = cmd.getArgument();
-    BrowserUtil.launchBrowser(helpTopicUrl(key));
+    BrowserUtil.browse(helpTopicUrl(key));
     return true;
   }
 

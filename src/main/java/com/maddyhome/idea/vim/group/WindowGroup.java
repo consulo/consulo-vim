@@ -34,11 +34,12 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
-import com.intellij.openapi.fileEditor.impl.EditorWithProviderComposite;
+import com.intellij.openapi.fileEditor.impl.DesktopEditorWithProviderComposite;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.maddyhome.idea.vim.VimPlugin;
 import consulo.fileEditor.impl.EditorWindow;
+import consulo.fileEditor.impl.EditorWithProviderComposite;
 
 public class WindowGroup {
   public WindowGroup() {
@@ -175,8 +176,8 @@ public class WindowGroup {
   private static Rectangle getEditorWindowRectangle(@NotNull EditorWindow window) {
     final EditorWithProviderComposite editor = window.getSelectedEditor();
     if (editor != null) {
-      final Point point = editor.getComponent().getLocationOnScreen();
-      final Dimension dimension = editor.getComponent().getSize();
+      final Point point = ((DesktopEditorWithProviderComposite)editor).getComponent().getLocationOnScreen();
+      final Dimension dimension = ((DesktopEditorWithProviderComposite)editor).getComponent().getSize();
       return new Rectangle(point, dimension);
     }
     return null;

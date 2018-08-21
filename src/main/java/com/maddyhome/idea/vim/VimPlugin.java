@@ -17,19 +17,8 @@
  */
 package com.maddyhome.idea.vim;
 
-import java.awt.Toolkit;
-import java.io.File;
-
-import javax.swing.event.HyperlinkEvent;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
+import com.intellij.notification.*;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -56,6 +45,13 @@ import com.maddyhome.idea.vim.helper.DocumentManager;
 import com.maddyhome.idea.vim.helper.MacKeyRepeat;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.event.HyperlinkEvent;
+import java.awt.*;
+import java.io.File;
 
 /**
  * This plugin attempts to emulate the key binding and general functionality of Vim and gVim. See the supplied
@@ -69,7 +65,6 @@ import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
  */
 @State(name = "VimSettings", storages = @Storage("vim_settings.xml"))
 public class VimPlugin implements ApplicationComponent, PersistentStateComponent<Element> {
-  private static final String IDEAVIM_COMPONENT_NAME = "VimPlugin";
   public static final String IDEAVIM_NOTIFICATION_ID = "ideavim";
   public static final String IDEAVIM_STICKY_NOTIFICATION_ID = "ideavim-sticky";
   public static final String IDEAVIM_NOTIFICATION_TITLE = "Vim Emulator";
@@ -117,12 +112,6 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
     editor = new EditorGroup();
 
     LOG.debug("VimPlugin ctr");
-  }
-
-  @NotNull
-  @Override
-  public String getComponentName() {
-    return IDEAVIM_COMPONENT_NAME;
   }
 
   @Override
@@ -342,7 +331,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
 
   @NotNull
   private static VimPlugin getInstance() {
-    return (VimPlugin)ApplicationManager.getApplication().getComponent(IDEAVIM_COMPONENT_NAME);
+    return Application.get().getComponent(VimPlugin.class);
   }
 
   private void turnOnPlugin() {
@@ -360,7 +349,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
   }
 
   private void updateState() {
-    if (isEnabled() && !ApplicationManager.getApplication().isUnitTestMode()) {
+    if (isEnabled()) {
       if (SystemInfo.isMac) {
         final MacKeyRepeat keyRepeat = MacKeyRepeat.getInstance();
         final Boolean enabled = keyRepeat.isEnabled();

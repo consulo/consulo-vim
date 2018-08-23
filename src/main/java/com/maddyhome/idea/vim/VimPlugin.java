@@ -17,10 +17,22 @@
  */
 package com.maddyhome.idea.vim;
 
-import com.intellij.notification.*;
+import java.awt.Toolkit;
+import java.io.File;
+
+import javax.swing.event.HyperlinkEvent;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -45,13 +57,6 @@ import com.maddyhome.idea.vim.helper.DocumentManager;
 import com.maddyhome.idea.vim.helper.MacKeyRepeat;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
-import java.io.File;
 
 /**
  * This plugin attempts to emulate the key binding and general functionality of Vim and gVim. See the supplied
@@ -64,7 +69,7 @@ import java.io.File;
  * @version 0.1
  */
 @State(name = "VimSettings", storages = @Storage("vim_settings.xml"))
-public class VimPlugin implements ApplicationComponent, PersistentStateComponent<Element> {
+public class VimPlugin implements PersistentStateComponent<Element>, Disposable {
   public static final String IDEAVIM_NOTIFICATION_ID = "ideavim";
   public static final String IDEAVIM_STICKY_NOTIFICATION_ID = "ideavim-sticky";
   public static final String IDEAVIM_NOTIFICATION_TITLE = "Vim Emulator";
@@ -115,7 +120,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
   }
 
   @Override
-  public void initComponent() {
+  public void afterLoadState() {
     LOG.debug("initComponent");
 
     Notifications.Bus.register(IDEAVIM_STICKY_NOTIFICATION_ID, NotificationDisplayType.STICKY_BALLOON);
@@ -149,7 +154,7 @@ public class VimPlugin implements ApplicationComponent, PersistentStateComponent
   }
 
   @Override
-  public void disposeComponent() {
+  public void dispose() {
     LOG.debug("disposeComponent");
     turnOffPlugin();
     EventFacade.getInstance().restoreTypedActionHandler();

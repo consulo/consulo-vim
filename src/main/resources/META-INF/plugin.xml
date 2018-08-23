@@ -10,18 +10,14 @@
 	<vendor>JetBrains</vendor>
 	<resource-bundle xmlns="">messages</resource-bundle>
 
-	<application-components>
-		<component>
-			<implementation-class>com.maddyhome.idea.vim.VimPlugin</implementation-class>
-		</component>
-	</application-components>
-
 	<extensionPoints>
 		<extensionPoint name="vimExtension" interface="com.maddyhome.idea.vim.extension.VimExtension"/>
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="com.intellij">
 		<applicationConfigurable instance="com.maddyhome.idea.vim.ui.VimEmulationConfigurable"/>
+
+		<applicationService serviceImplementation="com.maddyhome.idea.vim.VimPlugin" lazy="false" />
 	</extensions>
 
 	<extensions defaultExtensionNs="consulo.vim">

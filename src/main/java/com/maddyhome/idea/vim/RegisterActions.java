@@ -17,19 +17,19 @@
  */
 package com.maddyhome.idea.vim;
 
-import java.awt.event.KeyEvent;
-
-import javax.swing.KeyStroke;
-
-import com.intellij.ide.plugins.cl.PluginClassLoader;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.ex.ActionManagerEx;
+import com.intellij.openapi.extensions.PluginId;
 import com.maddyhome.idea.vim.action.VimCommandAction;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.MappingMode;
 import com.maddyhome.idea.vim.group.KeyGroup;
 import com.maddyhome.idea.vim.key.Shortcut;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 public class RegisterActions
 {
@@ -50,8 +50,8 @@ public class RegisterActions
 	private static void registerVimCommandActions()
 	{
 		final ActionManagerEx manager = ActionManagerEx.getInstanceEx();
-		PluginClassLoader classLoader = (PluginClassLoader) RegisterActions.class.getClassLoader();
-		for(String actionId : manager.getPluginActions(classLoader.getPluginId()))
+		PluginId pluginId = PluginManager.getPluginId(RegisterActions.class);
+		for(String actionId : manager.getPluginActions(pluginId))
 		{
 			final AnAction action = manager.getAction(actionId);
 			if(action instanceof VimCommandAction)

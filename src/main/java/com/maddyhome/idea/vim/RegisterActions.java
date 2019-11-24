@@ -20,13 +20,13 @@ package com.maddyhome.idea.vim;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.ex.ActionManagerEx;
-import com.intellij.openapi.extensions.PluginId;
 import com.maddyhome.idea.vim.action.VimCommandAction;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.MappingMode;
 import com.maddyhome.idea.vim.group.KeyGroup;
 import com.maddyhome.idea.vim.key.Shortcut;
+import consulo.container.plugin.PluginId;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

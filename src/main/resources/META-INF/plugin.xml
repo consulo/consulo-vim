@@ -1,4 +1,4 @@
-<idea-plugin>
+<consulo-plugin>
 	<id>consulo.vim</id>
 	<name>Vim Emulator</name>
 	<description>
@@ -309,4 +309,4 @@
 		<action id="VimShortcutKeyAction" class="com.maddyhome.idea.vim.action.VimShortcutKeyAction" text="Shortcuts"/>
 		<action id="VimOperatorAction" class="com.maddyhome.idea.vim.action.change.OperatorAction" text="Operator"/>
 	</actions>
-</idea-plugin>
+</consulo-plugin>

@@ -18,11 +18,11 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
+import org.jetbrains.annotations.NotNull;
 
 public class EditorDataContext implements DataContext {
   public EditorDataContext(Editor editor) {

@@ -20,8 +20,8 @@ package com.maddyhome.idea.vim.helper;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.util.Key;
 import com.maddyhome.idea.vim.EventFacade;
+import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;

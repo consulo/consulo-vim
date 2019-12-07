@@ -1,13 +1,5 @@
 package org.jetbrains.plugins.ideavim;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.KeyStroke;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
@@ -28,6 +20,12 @@ import com.maddyhome.idea.vim.helper.RunnableHelper;
 import com.maddyhome.idea.vim.helper.StringHelper;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author vlan
@@ -56,7 +54,7 @@ public abstract class VimTestCase extends UsefulTestCase {
   }
 
   protected String getTestDataPath() {
-    return PathManager.getHomePath() + "/community/plugins/ideavim/testData";
+    return "/";
   }
 
   @Override

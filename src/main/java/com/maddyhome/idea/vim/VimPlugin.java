@@ -30,7 +30,6 @@ import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -57,6 +56,7 @@ import com.maddyhome.idea.vim.helper.DocumentManager;
 import com.maddyhome.idea.vim.helper.MacKeyRepeat;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
+import consulo.disposer.Disposable;
 
 /**
  * This plugin attempts to emulate the key binding and general functionality of Vim and gVim. See the supplied
@@ -69,7 +69,8 @@ import com.maddyhome.idea.vim.ui.VimEmulationConfigurable;
  * @version 0.1
  */
 @State(name = "VimSettings", storages = @Storage("vim_settings.xml"))
-public class VimPlugin implements PersistentStateComponent<Element>, Disposable {
+public class VimPlugin implements PersistentStateComponent<Element>, Disposable
+{
   public static final String IDEAVIM_NOTIFICATION_ID = "ideavim";
   public static final String IDEAVIM_STICKY_NOTIFICATION_ID = "ideavim-sticky";
   public static final String IDEAVIM_NOTIFICATION_TITLE = "Vim Emulator";

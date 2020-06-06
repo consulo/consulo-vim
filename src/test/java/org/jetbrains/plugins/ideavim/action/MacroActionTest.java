@@ -12,7 +12,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author vlan
  */
-public class MacroActionTest extends VimTestCase {
+public abstract class MacroActionTest extends VimTestCase {
   // |q|
   public void testRecordMacro() {
     final Editor editor = typeTextInFile(parseKeys("qa", "3l", "q"), "on<caret>e two three\n");

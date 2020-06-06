@@ -17,7 +17,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author vlan
  */
-public class SearchGroupTest extends VimTestCase {
+public abstract class SearchGroupTest extends VimTestCase {
   // |/|
   public void testOneLetter() {
     final int pos = search("w",

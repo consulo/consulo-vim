@@ -8,7 +8,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author abrookins
  */
-public class ShiftRightLinesActionTest extends VimTestCase {
+public abstract class ShiftRightLinesActionTest extends VimTestCase {
   // VIM-407
   public void testShiftShiftsOneCharacterSingleLine() {
     myFixture.configureByText("a.txt", "<caret>w\n");

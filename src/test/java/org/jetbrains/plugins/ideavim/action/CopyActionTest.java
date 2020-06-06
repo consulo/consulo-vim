@@ -13,7 +13,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author vlan
  */
-public class CopyActionTest extends VimTestCase {
+public abstract class CopyActionTest extends VimTestCase {
   // |y| |p| |count|
   public void testYankPutCharacters() {
     typeTextInFile(parseKeys("y2h", "p"),

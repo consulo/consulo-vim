@@ -1,11 +1,11 @@
 package org.jetbrains.plugins.ideavim.helper;
 
+import com.maddyhome.idea.vim.helper.SearchHelper;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
-import com.maddyhome.idea.vim.helper.SearchHelper;
-
-public class SearchHelperTest {
+public abstract class SearchHelperTest {
   @Test
   public void testFindNextWord() throws Exception {
     String text = "first second";

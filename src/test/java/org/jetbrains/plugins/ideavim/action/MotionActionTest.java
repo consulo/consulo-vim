@@ -13,7 +13,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.stringToKeys;
 /**
  * @author vlan
  */
-public class MotionActionTest extends VimTestCase {
+public abstract class MotionActionTest extends VimTestCase {
   // VIM-198 |v_iw|
   public void testVisualMotionInnerWordNewLineAtEOF() {
     typeTextInFile(parseKeys("viw"),

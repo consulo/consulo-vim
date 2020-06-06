@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author vlan
  */
-public class StringHelperTest extends TestCase {
+public abstract class StringHelperTest extends TestCase {
   public void testParseKeyModifiers() {
     assertTypedKeyStroke('C', "C");
     assertTypedKeyStroke('c', "c");

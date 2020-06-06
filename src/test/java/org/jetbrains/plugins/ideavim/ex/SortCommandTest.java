@@ -11,7 +11,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.stringToKeys;
 /**
  * @author Alex Selesse
  */
-public class SortCommandTest extends VimTestCase {
+public abstract class SortCommandTest extends VimTestCase {
   public void testBasicSort() {
     myFixture.configureByText("a.txt", "Test\n" + "Hello World!\n");
     final List<KeyStroke> keys = Lists.newArrayList(KeyStroke.getKeyStroke("control V"));

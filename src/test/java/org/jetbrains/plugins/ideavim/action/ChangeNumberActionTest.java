@@ -7,7 +7,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author Tuomas Tynkkynen
  */
-public class ChangeNumberActionTest extends VimTestCase {
+public abstract class ChangeNumberActionTest extends VimTestCase {
   public void testIncrementDecimalZero() {
     doTest(parseKeys("<C-A>"), "0", "1");
   }

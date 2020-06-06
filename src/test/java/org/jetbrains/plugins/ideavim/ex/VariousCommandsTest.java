@@ -8,7 +8,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author vlan
  */
-public class VariousCommandsTest extends VimTestCase {
+public abstract class VariousCommandsTest extends VimTestCase {
   // VIM-550 |:put|
   public void testPutCreatesNewLine() {
     myFixture.configureByText("a.txt", "Test\n" +

@@ -9,7 +9,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author Tuomas Tynkkynen
  */
-public class MarkTest extends VimTestCase {
+public abstract class MarkTest extends VimTestCase {
   // |m|
   public void testLocalMark() {
     typeTextInFile(parseKeys("ma"), "    foo\n" +

@@ -7,7 +7,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
 /**
  * @author vlan
  */
-public class SubstituteCommandTest extends VimTestCase {
+public abstract class SubstituteCommandTest extends VimTestCase {
   // |:substitute|
   public void testOneLetter() {
     doTest("s/a/b/",

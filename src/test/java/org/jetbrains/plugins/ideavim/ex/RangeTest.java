@@ -5,7 +5,7 @@ import org.jetbrains.plugins.ideavim.VimTestCase;
 /**
  * @author Tuomas Tynkkynen
  */
-public class RangeTest extends VimTestCase {
+public abstract class RangeTest extends VimTestCase {
   public void testNoRange() {
     myFixture.configureByText("a.txt", "1\n2\n<caret>3\n4\n5\n");
     typeText(commandToKeys("d"));

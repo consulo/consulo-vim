@@ -18,42 +18,29 @@
 
 package com.maddyhome.idea.vim.group;
 
-import java.awt.Color;
-import java.util.List;
-
-import javax.swing.KeyStroke;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.EditorGutter;
-import com.intellij.openapi.editor.EditorSettings;
-import com.intellij.openapi.editor.TextAnnotationGutterProvider;
-import com.intellij.openapi.editor.colors.ColorKey;
+import com.intellij.openapi.editor.*;
+import com.intellij.openapi.editor.colors.EditorColorKey;
 import com.intellij.openapi.editor.colors.EditorColors;
 import com.intellij.openapi.editor.colors.EditorFontType;
-import com.intellij.openapi.editor.event.CaretAdapter;
-import com.intellij.openapi.editor.event.CaretEvent;
-import com.intellij.openapi.editor.event.CaretListener;
-import com.intellij.openapi.editor.event.EditorFactoryAdapter;
-import com.intellij.openapi.editor.event.EditorFactoryEvent;
+import com.intellij.openapi.editor.event.*;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.maddyhome.idea.vim.EventFacade;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.CommandState;
-import com.maddyhome.idea.vim.helper.DocumentManager;
-import com.maddyhome.idea.vim.helper.EditorData;
-import com.maddyhome.idea.vim.helper.EditorDataContext;
-import com.maddyhome.idea.vim.helper.EditorHelper;
-import com.maddyhome.idea.vim.helper.StringHelper;
+import com.maddyhome.idea.vim.helper.*;
 import com.maddyhome.idea.vim.option.OptionChangeEvent;
 import com.maddyhome.idea.vim.option.OptionChangeListener;
 import com.maddyhome.idea.vim.option.Options;
+import consulo.ui.color.ColorValue;
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.util.List;
 
 /**
  * @author vlan
@@ -303,13 +290,13 @@ public class EditorGroup {
 
     @Nullable
     @Override
-    public ColorKey getColor(int line, Editor editor) {
+    public EditorColorKey getColor(int line, Editor editor) {
       return EditorColors.LINE_NUMBERS_COLOR;
     }
 
     @Nullable
     @Override
-    public Color getBgColor(int line, Editor editor) {
+    public ColorValue getBgColor(int line, Editor editor) {
       return null;
     }
 

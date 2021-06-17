@@ -30,7 +30,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import gnu.trove.TIntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +55,7 @@ public class PsiHelper {
     TreeBasedStructureViewBuilder builder = (TreeBasedStructureViewBuilder)structureViewBuilder;
     StructureViewModel model = builder.createStructureViewModel(editor);
 
-    TIntArrayList navigationOffsets = new TIntArrayList();
+    IntList navigationOffsets = IntLists.newArrayList();
     addNavigationElements(model.getRoot(), navigationOffsets, isStart);
 
     if (navigationOffsets.isEmpty()) {
@@ -86,7 +87,7 @@ public class PsiHelper {
     return navigationOffsets.get(resultIndex);
   }
 
-  private static void addNavigationElements(@NotNull TreeElement root, @NotNull TIntArrayList navigationOffsets, boolean start) {
+  private static void addNavigationElements(@NotNull TreeElement root, @NotNull IntList navigationOffsets, boolean start) {
     if (root instanceof PsiTreeElementBase) {
       PsiElement element = ((PsiTreeElementBase)root).getValue();
       int offset;

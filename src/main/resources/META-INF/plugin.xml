@@ -9,6 +9,9 @@
 	<version>SNAPSHOT</version>
 	<vendor>JetBrains</vendor>
 	<resource-bundle xmlns="">messages</resource-bundle>
+	<tags>
+		<tag>editor.extension</tag>
+	</tags>
 
 	<extensionPoints>
 		<extensionPoint name="vimExtension" interface="com.maddyhome.idea.vim.extension.VimExtension"/>

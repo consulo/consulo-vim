@@ -18,9 +18,9 @@
 
 package com.maddyhome.idea.vim.action;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.project.DumbAware;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ToggleAction;
+import consulo.application.dumb.DumbAware;
 import com.maddyhome.idea.vim.VimPlugin;
 
 /**

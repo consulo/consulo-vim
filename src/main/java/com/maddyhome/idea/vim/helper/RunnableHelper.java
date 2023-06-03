@@ -18,11 +18,11 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.undoRedo.CommandProcessor;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import com.maddyhome.idea.vim.KeyHandler;
+import consulo.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

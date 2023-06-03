@@ -18,9 +18,9 @@
 
 package com.maddyhome.idea.vim.command;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.editor.actionSystem.EditorAction;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
+import consulo.ui.ex.action.AnAction;
+import consulo.codeEditor.action.EditorAction;
+import consulo.codeEditor.action.EditorActionHandler;
 import com.maddyhome.idea.vim.handler.EditorActionHandlerBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

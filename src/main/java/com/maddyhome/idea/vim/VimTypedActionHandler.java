@@ -18,12 +18,13 @@
 
 package com.maddyhome.idea.vim;
 
-import com.intellij.codeInsight.lookup.Lookup;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
+import com.maddyhome.idea.vim.action.VimShortcutKeyAction;
+import consulo.language.editor.completion.lookup.Lookup;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.dataContext.DataContext;
+import consulo.logging.Logger;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.TypedActionHandler;
 import com.maddyhome.idea.vim.helper.EditorDataContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +33,7 @@ import javax.swing.*;
 /**
  * Accepts all regular keystrokes and passes them on to the Vim key handler.
  *
- * IDE shortcut keys used by Vim commands are handled by {@link com.maddyhome.idea.vim.action.VimShortcutKeyAction}.
+ * IDE shortcut keys used by Vim commands are handled by {@link VimShortcutKeyAction}.
  */
 public class VimTypedActionHandler implements TypedActionHandler {
   private static final Logger logger = Logger.getInstance(VimTypedActionHandler.class.getName());

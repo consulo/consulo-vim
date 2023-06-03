@@ -18,10 +18,9 @@
 
 package com.maddyhome.idea.vim.extension;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Ref;
-import com.intellij.util.Processor;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.ref.Ref;
+import consulo.application.util.function.Processor;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.MappingMode;
@@ -32,6 +31,7 @@ import com.maddyhome.idea.vim.helper.TestInputModel;
 import com.maddyhome.idea.vim.key.OperatorFunction;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
 import com.maddyhome.idea.vim.ui.ModalEntry;
+import consulo.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -18,10 +18,10 @@
 
 package com.maddyhome.idea.vim.group;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.maddyhome.idea.vim.helper.StringHelper;
 import com.maddyhome.idea.vim.option.NumberOption;
 import com.maddyhome.idea.vim.option.Options;
+import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 

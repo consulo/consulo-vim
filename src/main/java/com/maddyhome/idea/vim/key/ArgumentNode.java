@@ -18,7 +18,7 @@
 
 package com.maddyhome.idea.vim.key;
 
-import com.intellij.openapi.actionSystem.AnAction;
+import consulo.ui.ex.action.AnAction;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.command.Command;
 import org.jetbrains.annotations.NotNull;

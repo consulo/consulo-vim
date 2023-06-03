@@ -18,12 +18,11 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.LightVirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.file.light.LightVirtualFile;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.CommandState;
 import com.maddyhome.idea.vim.command.SelectionType;
@@ -32,6 +31,7 @@ import com.maddyhome.idea.vim.common.TextRange;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.group.MotionGroup;
 import com.maddyhome.idea.vim.ui.ExOutputPanel;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -285,7 +285,7 @@ public class EditorData {
       // I tried to create a Key with the same name but it doesn't work. Most likely the Key implementation is
       // coded such that two keys with the same name are treated as different keys - oh well.
       // This code will work as long as the key I need is the first one in the ConsoleViewImpl.
-      Class cvi = Class.forName("com.intellij.execution.impl.ConsoleViewImpl");
+      Class cvi = Class.forName("consulo.ide.impl.idea.execution.impl.ConsoleViewImpl");
       Field[] fields = cvi.getDeclaredFields();
       for (Field f : fields) {
         if (f.getType().equals(Key.class)) {

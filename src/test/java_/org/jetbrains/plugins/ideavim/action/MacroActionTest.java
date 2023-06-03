@@ -1,6 +1,6 @@
 package org.jetbrains.plugins.ideavim.action;
 
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.CommandState;
 import com.maddyhome.idea.vim.common.Register;

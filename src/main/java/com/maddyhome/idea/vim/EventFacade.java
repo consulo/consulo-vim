@@ -18,20 +18,24 @@
 
 package com.maddyhome.idea.vim;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.ShortcutSet;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.editor.actionSystem.TypedAction;
-import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
-import com.intellij.openapi.editor.event.*;
-import com.intellij.openapi.fileEditor.FileEditorManagerListener;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.project.ProjectManagerListener;
-import com.intellij.util.messages.MessageBusConnection;
+import consulo.codeEditor.event.EditorFactoryListener;
+import consulo.codeEditor.event.EditorMouseListener;
+import consulo.codeEditor.event.EditorMouseMotionListener;
+import consulo.codeEditor.event.SelectionListener;
+import consulo.document.event.DocumentListener;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.ShortcutSet;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorFactory;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.codeEditor.action.TypedAction;
+import consulo.codeEditor.action.TypedActionHandler;
+import consulo.fileEditor.event.FileEditorManagerListener;
+import consulo.project.event.ProjectManagerListener;
+import consulo.component.messagebus.MessageBusConnection;
 import consulo.disposer.Disposable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,8 +58,8 @@ public class EventFacade {
     return ourInstance;
   }
 
-  public void addProjectManagerListener(@NotNull ProjectManagerListener listener) {
-    ProjectManager.getInstance().addProjectManagerListener(listener);
+  public void addProjectManagerListener(@NotNull ProjectManagerListener listener, Disposable disposable) {
+    ProjectManager.getInstance().addProjectManagerListener(listener, disposable);
   }
 
   public void setupTypedActionHandler(@NotNull TypedActionHandler handler) {
@@ -81,7 +85,7 @@ public class EventFacade {
 
   public void addFileEditorManagerListener(@NotNull Project project, @NotNull FileEditorManagerListener listener) {
     final MessageBusConnection connection = project.getMessageBus().connect();
-    connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, listener);
+    connection.subscribe(FileEditorManagerListener.class, listener);
   }
 
   public void addDocumentListener(@NotNull Document document, @NotNull DocumentListener listener) {

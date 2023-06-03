@@ -18,7 +18,7 @@
 
 package com.maddyhome.idea.vim.command;
 
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.helper.EditorData;
 import com.maddyhome.idea.vim.key.ParentNode;

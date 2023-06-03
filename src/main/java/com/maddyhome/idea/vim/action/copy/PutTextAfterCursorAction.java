@@ -18,12 +18,12 @@
 
 package com.maddyhome.idea.vim.action.copy;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorAction;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.handler.ChangeEditorActionHandler;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorAction;
+import consulo.dataContext.DataContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

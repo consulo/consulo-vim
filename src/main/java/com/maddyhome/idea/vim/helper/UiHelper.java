@@ -18,10 +18,10 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
+import consulo.application.ApplicationManager;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.EditorColorsScheme;
+import consulo.application.Application;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

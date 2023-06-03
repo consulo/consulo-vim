@@ -18,18 +18,21 @@
 
 package com.maddyhome.idea.vim.ui;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.KeyboardShortcut;
-import com.intellij.openapi.keymap.KeymapUtil;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.ui.ComboBoxTableRenderer;
-import com.intellij.openapi.ui.StripeTable;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.ui.UIUtil;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.key.ShortcutOwner;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.configurable.ApplicationConfigurable;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.StandardConfigurableIds;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.KeyboardShortcut;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.JBScrollPane;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.table.ComboBoxTableRenderer;
+import consulo.ui.ex.awt.table.StripeTable;
+import consulo.ui.ex.keymap.util.KeymapUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,27 +42,36 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * @author vlan
  */
-public class VimEmulationConfigurable implements Configurable {
-  @NotNull private final VimShortcutConflictsTable.Model myConflictsTableModel = new VimShortcutConflictsTable.Model();
-  @NotNull private final VimSettingsPanel myPanel = new VimSettingsPanel(myConflictsTableModel);
+@ExtensionImpl
+public class VimEmulationConfigurable implements ApplicationConfigurable {
+  @NotNull
+  private final VimShortcutConflictsTable.Model myConflictsTableModel = new VimShortcutConflictsTable.Model();
+  @NotNull
+  private final VimSettingsPanel myPanel = new VimSettingsPanel(myConflictsTableModel);
+
+  @Nonnull
+  @Override
+  public String getId() {
+    return "editor.vim";
+  }
+
+  @Nullable
+  @Override
+  public String getParentId() {
+    return StandardConfigurableIds.EDITOR_GROUP;
+  }
 
   @NotNull
   @Nls
   @Override
   public String getDisplayName() {
     return "Vim Emulation";
-  }
-
-  @Nullable
-  @Override
-  public String getHelpTopic() {
-    return null;
   }
 
   @Nullable
@@ -83,12 +95,9 @@ public class VimEmulationConfigurable implements Configurable {
     myConflictsTableModel.reset();
   }
 
-  @Override
-  public void disposeUIResources() {
-  }
-
   private static final class VimSettingsPanel extends JPanel {
-    @NotNull private final VimShortcutConflictsTable myShortcutConflictsTable;
+    @NotNull
+    private final VimShortcutConflictsTable myShortcutConflictsTable;
 
     public VimSettingsPanel(@NotNull VimShortcutConflictsTable.Model model) {
       myShortcutConflictsTable = new VimShortcutConflictsTable(model);
@@ -162,7 +171,8 @@ public class VimEmulationConfigurable implements Configurable {
     }
 
     private static final class Model extends AbstractTableModel {
-      @NotNull private final List<Row> myRows = new ArrayList<Row>();
+      @NotNull
+      private final List<Row> myRows = new ArrayList<Row>();
 
       public Model() {
         reset();
@@ -248,9 +258,12 @@ public class VimEmulationConfigurable implements Configurable {
     }
 
     private static final class Row implements Comparable<Row> {
-      @NotNull private final KeyStroke myKeyStroke;
-      @NotNull private final AnAction myAction;
-      @NotNull private ShortcutOwner myOwner;
+      @NotNull
+      private final KeyStroke myKeyStroke;
+      @NotNull
+      private final AnAction myAction;
+      @NotNull
+      private ShortcutOwner myOwner;
 
       private Row(@NotNull KeyStroke keyStroke, @NotNull AnAction action, @NotNull ShortcutOwner owner) {
         myKeyStroke = keyStroke;
@@ -290,7 +303,8 @@ public class VimEmulationConfigurable implements Configurable {
       IDE_ACTION(1, "IDE Action"),
       OWNER(2, "Handler");
 
-      @NotNull private static final Map<Integer, Column> ourMembers = new HashMap<Integer, Column>();
+      @NotNull
+      private static final Map<Integer, Column> ourMembers = new HashMap<Integer, Column>();
 
       static {
         for (Column column : values()) {
@@ -299,7 +313,8 @@ public class VimEmulationConfigurable implements Configurable {
       }
 
       private final int myIndex;
-      @NotNull private final String myTitle;
+      @NotNull
+      private final String myTitle;
 
       Column(int index, @NotNull String title) {
         myIndex = index;

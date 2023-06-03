@@ -1,6 +1,6 @@
 package com.maddyhome.idea.vim.ui;
 
-import com.intellij.util.Processor;
+import consulo.application.util.function.Processor;
 import com.maddyhome.idea.vim.helper.StringHelper;
 import org.jetbrains.annotations.NotNull;
 

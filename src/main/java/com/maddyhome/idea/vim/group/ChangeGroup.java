@@ -17,66 +17,52 @@
  */
 package com.maddyhome.idea.vim.group;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.maddyhome.idea.vim.EventFacade;
+import com.maddyhome.idea.vim.KeyHandler;
+import com.maddyhome.idea.vim.VimPlugin;
+import com.maddyhome.idea.vim.command.*;
+import com.maddyhome.idea.vim.common.Register;
+import com.maddyhome.idea.vim.common.TextRange;
+import com.maddyhome.idea.vim.ex.LineRange;
+import com.maddyhome.idea.vim.helper.*;
+import com.maddyhome.idea.vim.option.BoundListOption;
+import com.maddyhome.idea.vim.option.Options;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.*;
+import consulo.codeEditor.event.EditorFactoryAdapter;
+import consulo.codeEditor.event.EditorFactoryEvent;
+import consulo.codeEditor.event.EditorMouseEvent;
+import consulo.codeEditor.event.EditorMouseListener;
+import consulo.dataContext.DataContext;
+import consulo.document.Document;
+import consulo.document.FileDocumentManager;
+import consulo.document.event.DocumentAdapter;
+import consulo.document.event.DocumentEvent;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.file.FileTypeManager;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.undoRedo.CommandProcessor;
+import consulo.undoRedo.UndoConfirmationPolicy;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.swing.KeyStroke;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.command.UndoConfirmationPolicy;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.VisualPosition;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.EditorFactoryAdapter;
-import com.intellij.openapi.editor.event.EditorFactoryEvent;
-import com.intellij.openapi.editor.event.EditorMouseAdapter;
-import com.intellij.openapi.editor.event.EditorMouseEvent;
-import com.intellij.openapi.editor.impl.TextRangeInterval;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.maddyhome.idea.vim.EventFacade;
-import com.maddyhome.idea.vim.KeyHandler;
-import com.maddyhome.idea.vim.VimPlugin;
-import com.maddyhome.idea.vim.command.Argument;
-import com.maddyhome.idea.vim.command.Command;
-import com.maddyhome.idea.vim.command.CommandState;
-import com.maddyhome.idea.vim.command.MappingMode;
-import com.maddyhome.idea.vim.command.SelectionType;
-import com.maddyhome.idea.vim.common.Register;
-import com.maddyhome.idea.vim.common.TextRange;
-import com.maddyhome.idea.vim.ex.LineRange;
-import com.maddyhome.idea.vim.helper.CharacterHelper;
-import com.maddyhome.idea.vim.helper.EditorData;
-import com.maddyhome.idea.vim.helper.EditorHelper;
-import com.maddyhome.idea.vim.helper.SearchHelper;
-import com.maddyhome.idea.vim.helper.StringHelper;
-import com.maddyhome.idea.vim.option.BoundListOption;
-import com.maddyhome.idea.vim.option.Options;
 
 /**
  * Provides all the insert/replace related functionality
@@ -109,7 +95,7 @@ public class ChangeGroup {
         }
       }
 
-      @NotNull private final EditorMouseAdapter listener = new EditorMouseAdapter() {
+      @NotNull private final EditorMouseListener listener = new EditorMouseListener() {
         public void mouseClicked(@NotNull EditorMouseEvent event) {
           Editor editor = event.getEditor();
           if (!VimPlugin.isEnabled()) {
@@ -1593,7 +1579,7 @@ public class ChangeGroup {
    */
   private boolean sortTextRange(@NotNull Editor editor, int start, int end,
                                 @NotNull Comparator<String> lineComparator) {
-    final String selectedText = editor.getDocument().getText(new TextRangeInterval(start, end));
+    final String selectedText = editor.getDocument().getText(new consulo.document.util.TextRange(start, end));
     final List<String> lines = Lists.newArrayList(Splitter.on("\n").split(selectedText));
     if (lines.size() < 1) {
       return false;

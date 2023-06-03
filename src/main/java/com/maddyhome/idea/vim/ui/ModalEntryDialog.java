@@ -18,7 +18,7 @@
 
 package com.maddyhome.idea.vim.ui;
 
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.helper.UiHelper;
 import org.jetbrains.annotations.NotNull;
 

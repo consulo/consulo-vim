@@ -18,12 +18,16 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.*;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorFactory;
+import consulo.codeEditor.LogicalPosition;
+import consulo.codeEditor.VisualPosition;
+import consulo.document.Document;
+import consulo.logging.Logger;
+import consulo.document.FileDocumentManager;
+import consulo.fileEditor.FileEditorManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.maddyhome.idea.vim.common.CharacterPosition;
 import com.maddyhome.idea.vim.common.TextRange;
 import org.jetbrains.annotations.NotNull;

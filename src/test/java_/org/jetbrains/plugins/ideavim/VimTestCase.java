@@ -1,9 +1,9 @@
 package org.jetbrains.plugins.ideavim;
 
-import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileTypes.PlainTextFileType;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Caret;
+import consulo.codeEditor.Editor;
+import consulo.language.plain.PlainTextFileType;
+import consulo.project.Project;
 import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;

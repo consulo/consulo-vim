@@ -18,10 +18,10 @@
 
 package com.maddyhome.idea.vim.ex;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.helper.EditorData;
 import com.maddyhome.idea.vim.ui.ExOutputPanel;
+import consulo.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -18,10 +18,9 @@
 
 package com.maddyhome.idea.vim.group;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.util.text.CharSequenceReader;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.util.io.CharSequenceReader;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.Command;
@@ -32,6 +31,7 @@ import com.maddyhome.idea.vim.ex.CommandParser;
 import com.maddyhome.idea.vim.ex.ExException;
 import com.maddyhome.idea.vim.helper.UiHelper;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

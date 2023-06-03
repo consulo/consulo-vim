@@ -18,9 +18,9 @@
 
 package com.maddyhome.idea.vim.action.motion;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorAction;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorAction;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.common.TextRange;
 import com.maddyhome.idea.vim.handler.TextObjectActionHandler;

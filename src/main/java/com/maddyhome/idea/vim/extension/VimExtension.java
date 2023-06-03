@@ -18,14 +18,17 @@
 
 package com.maddyhome.idea.vim.extension;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.extensions.ExtensionPointName;
 
 /**
  * @author vlan
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface VimExtension {
-  @NotNull ExtensionPointName<VimExtension> EP_NAME = ExtensionPointName.create("consulo.vim.vimExtension");
+  ExtensionPointName<VimExtension> EP_NAME = ExtensionPointName.create(VimExtension.class);
 
   @NotNull
   String getName();

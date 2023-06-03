@@ -18,8 +18,8 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentListener;
+import consulo.document.Document;
+import consulo.document.event.DocumentListener;
 import com.maddyhome.idea.vim.EventFacade;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NotNull;

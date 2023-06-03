@@ -18,13 +18,13 @@
 
 package com.maddyhome.idea.vim.action;
 
-import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorAction;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.maddyhome.idea.vim.KeyHandler;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorAction;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.inject.EditorWindow;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -33,7 +33,7 @@ public class ResetModeAction extends EditorAction {
   public ResetModeAction() {
     super(new EditorActionHandler() {
       public void execute(@NotNull Editor editor, @NotNull DataContext context) {
-        KeyHandler.getInstance().fullReset(InjectedLanguageUtil.getTopLevelEditor(editor));
+        KeyHandler.getInstance().fullReset(EditorWindow.getTopLevelEditor(editor));
       }
     });
   }

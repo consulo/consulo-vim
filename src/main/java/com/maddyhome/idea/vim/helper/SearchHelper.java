@@ -19,23 +19,22 @@
 package com.maddyhome.idea.vim.helper;
 
 import com.google.common.collect.Lists;
-import com.intellij.lang.CodeDocumentationAwareCommenter;
-import com.intellij.lang.Commenter;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageCommenters;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.maddyhome.idea.vim.common.TextRange;
 import com.maddyhome.idea.vim.option.ListOption;
 import com.maddyhome.idea.vim.option.OptionChangeEvent;
 import com.maddyhome.idea.vim.option.OptionChangeListener;
 import com.maddyhome.idea.vim.option.Options;
+import consulo.codeEditor.Editor;
+import consulo.language.CodeDocumentationAwareCommenter;
+import consulo.language.Commenter;
+import consulo.language.Language;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -174,7 +173,7 @@ public class SearchHelper {
 
   private static int findMatchingBlockCommentPair(@NotNull PsiElement element, int pos) {
     final Language language = element.getLanguage();
-    final Commenter commenter = LanguageCommenters.INSTANCE.forLanguage(language);
+    final Commenter commenter = Commenter.forLanguage(language);
     final PsiComment comment = PsiTreeUtil.getParentOfType(element, PsiComment.class, false);
     if (comment != null) {
       final int ret = findMatchingBlockCommentPair(comment, pos, commenter.getBlockCommentPrefix(),
@@ -827,7 +826,7 @@ public class SearchHelper {
    */
   @NotNull
   private static Pair<Integer, Integer> findRange(@NotNull final String text, final int pos,
-                                                  final boolean alpha, final boolean hex, final boolean octal, final boolean decimal) {
+                                                                    final boolean alpha, final boolean hex, final boolean octal, final boolean decimal) {
     int end = pos;
     while (end < text.length() && isNumberChar(text.charAt(end), alpha, hex, octal, decimal)) {
       end++;

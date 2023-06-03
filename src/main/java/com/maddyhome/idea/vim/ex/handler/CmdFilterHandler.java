@@ -18,14 +18,14 @@
 
 package com.maddyhome.idea.vim.ex.handler;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.common.TextRange;
 import com.maddyhome.idea.vim.ex.*;
 import com.maddyhome.idea.vim.helper.MessageHelper;
 import com.maddyhome.idea.vim.helper.Msg;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

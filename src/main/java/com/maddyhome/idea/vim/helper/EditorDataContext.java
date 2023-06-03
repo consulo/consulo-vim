@@ -18,9 +18,9 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.codeEditor.Editor;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NotNull;
 

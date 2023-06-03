@@ -18,7 +18,7 @@
 
 package com.maddyhome.idea.vim.extension;
 
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 
 /**
  * @author vlan

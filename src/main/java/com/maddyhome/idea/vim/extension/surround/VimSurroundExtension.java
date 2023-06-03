@@ -19,9 +19,10 @@
 package com.maddyhome.idea.vim.extension.surround;
 
 import com.google.common.collect.ImmutableMap;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Pair;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.Pair;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.CommandState;
 import com.maddyhome.idea.vim.command.MappingMode;
@@ -53,6 +54,7 @@ import static com.maddyhome.idea.vim.helper.StringHelper.parseKeys;
  * @author dhleong
  * @author vlan
  */
+@ExtensionImpl
 public class VimSurroundExtension extends VimNonDisposableExtension {
 
   private static final char REGISTER = '"';

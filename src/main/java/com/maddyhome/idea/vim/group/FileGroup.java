@@ -18,35 +18,6 @@
 
 package com.maddyhome.idea.vim.group;
 
-import java.io.File;
-import java.util.HashMap;
-
-import javax.swing.KeyStroke;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerAdapter;
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
-import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
-import com.intellij.openapi.fileEditor.impl.DesktopEditorWindow;
-import com.intellij.openapi.fileEditor.impl.EditorTabbedContainer;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.CommandState;
@@ -55,7 +26,29 @@ import com.maddyhome.idea.vim.helper.EditorData;
 import com.maddyhome.idea.vim.helper.EditorHelper;
 import com.maddyhome.idea.vim.helper.SearchHelper;
 import com.maddyhome.idea.vim.helper.StringHelper;
-import consulo.fileEditor.impl.EditorWindow;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.dataContext.DataContext;
+import consulo.document.Document;
+import consulo.document.FileDocumentManager;
+import consulo.fileEditor.*;
+import consulo.fileEditor.event.FileEditorManagerAdapter;
+import consulo.fileEditor.event.FileEditorManagerEvent;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.file.FileTypeManager;
+import consulo.logging.Logger;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.io.File;
+import java.util.HashMap;
 
 /**
  *
@@ -165,23 +158,15 @@ public class FileGroup {
   public void closeFile(@NotNull Editor editor, @NotNull DataContext context) {
     final Project project = context.getData(PlatformDataKeys.PROJECT);
     if (project != null) {
-      final FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
-      final EditorWindow window = fileEditorManager.getCurrentWindow();
-      final EditorTabbedContainer tabbedPane = ((DesktopEditorWindow)window).getTabbedPane();
-      if (tabbedPane != null) {
-        if (tabbedPane.getTabCount() > 1) {
-          final int index = tabbedPane.getSelectedIndex();
-          tabbedPane.removeTabAt(index, index + 1);
-        }
-        else {
-          tabbedPane.close();
-        }
+      final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+      final FileEditorWindow window = fileEditorManager.getCurrentWindow();
+      final FileEditorTabbedContainer tabbedPane = window.getContainer();
+      if (tabbedPane.getTabCount() > 1) {
+        final int index = tabbedPane.getSelectedIndex();
+        tabbedPane.removeTabAt(index, index + 1);
       }
       else {
-        VirtualFile virtualFile = EditorData.getVirtualFile(editor);
-        if (virtualFile != null) {
-          fileEditorManager.closeFile(virtualFile);
-        }
+        tabbedPane.close();
       }
     }
   }

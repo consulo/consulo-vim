@@ -18,10 +18,10 @@
 
 package com.maddyhome.idea.vim.group;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.helper.EditorHelper;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

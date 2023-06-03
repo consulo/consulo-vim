@@ -19,17 +19,23 @@
 package com.maddyhome.idea.vim.action;
 
 import com.google.common.collect.ImmutableSet;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.keymap.KeymapUtil;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
+import com.maddyhome.idea.vim.VimTypedActionHandler;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.logging.Logger;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.NotificationType;
+import consulo.project.ui.notification.event.NotificationListener;
+import consulo.codeEditor.Editor;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.EmptyAction;
+import consulo.ui.ex.action.KeyboardShortcut;
+import consulo.ui.ex.keymap.util.KeymapUtil;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.action.change.insert.InsertExitModeAction;
@@ -55,7 +61,7 @@ import static java.awt.event.KeyEvent.*;
 /**
  * Handles Vim keys that are treated as action shortcuts by the IDE.
  *
- * These keys are not passed to {@link com.maddyhome.idea.vim.VimTypedActionHandler} and should be handled by actions.
+ * These keys are not passed to {@link VimTypedActionHandler} and should be handled by actions.
  */
 public class VimShortcutKeyAction extends AnAction implements DumbAware {
   private static final String ACTION_ID = "VimShortcutKeyAction";

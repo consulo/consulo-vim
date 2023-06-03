@@ -18,8 +18,8 @@
 
 package com.maddyhome.idea.vim.ex;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
 
 /**
  * Represents an Ex command range

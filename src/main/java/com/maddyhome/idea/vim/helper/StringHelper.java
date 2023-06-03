@@ -20,15 +20,16 @@ package com.maddyhome.idea.vim.helper;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.maddyhome.idea.vim.ex.vimscript.VimScriptGlobalEnvironment;
-import org.apache.commons.codec.binary.Base64;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.lang.IllegalArgumentException;
 import java.util.*;
 
 import static java.awt.event.KeyEvent.*;
@@ -143,7 +144,7 @@ public class StringHelper {
   /**
    * Parses Vim key notation strings.
    *
-   * @throws java.lang.IllegalArgumentException if the mapping doesn't make sense for Vim emulation
+   * @throws IllegalArgumentException if the mapping doesn't make sense for Vim emulation
    * @see :help <>
    */
   @NotNull
@@ -339,7 +340,7 @@ public class StringHelper {
         first != null && Character.isWhitespace(first) ||
         last != null && Character.isWhitespace(last)) {
       element.setAttribute("encoding", "base64");
-      final String encoded = new String(Base64.encodeBase64(text.getBytes()));
+      final String encoded = Base64.getEncoder().encodeToString(text.getBytes());
       element.setText(encoded);
     }
     else {
@@ -359,7 +360,7 @@ public class StringHelper {
       return text;
     }
     else if (encoding.equals("base64")) {
-      return new String(Base64.decodeBase64(text.getBytes()));
+      return Base64.getEncoder().encodeToString(text.getBytes());
     }
     return null;
   }

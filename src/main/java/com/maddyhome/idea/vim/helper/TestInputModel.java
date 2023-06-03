@@ -19,7 +19,7 @@
 package com.maddyhome.idea.vim.helper;
 
 import com.google.common.collect.Lists;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

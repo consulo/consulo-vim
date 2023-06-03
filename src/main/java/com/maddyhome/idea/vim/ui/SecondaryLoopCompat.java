@@ -1,6 +1,6 @@
 package com.maddyhome.idea.vim.ui;
 
-import com.intellij.openapi.util.Ref;
+import consulo.util.lang.ref.Ref;
 
 import java.awt.*;
 import java.lang.reflect.*;

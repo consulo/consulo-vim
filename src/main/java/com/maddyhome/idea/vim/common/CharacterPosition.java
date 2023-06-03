@@ -18,7 +18,7 @@
 
 package com.maddyhome.idea.vim.common;
 
-import com.intellij.openapi.editor.LogicalPosition;
+import consulo.codeEditor.LogicalPosition;
 
 /**
  *

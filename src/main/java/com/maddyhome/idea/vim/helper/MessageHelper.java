@@ -18,8 +18,8 @@
 
 package com.maddyhome.idea.vim.helper;
 
-import com.intellij.CommonBundle;
-import com.intellij.reference.SoftReference;
+import consulo.application.CommonBundle;
+import consulo.util.lang.ref.SoftReference;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

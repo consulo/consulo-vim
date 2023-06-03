@@ -18,15 +18,15 @@
 
 package com.maddyhome.idea.vim.action.change.insert;
 
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.action.VimCommandAction;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.MappingMode;
 import com.maddyhome.idea.vim.handler.EditorActionHandlerBase;
+import consulo.codeEditor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.inject.EditorWindow;
+import consulo.ui.ex.action.ActionManager;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -39,7 +39,7 @@ public class InsertExitModeAction extends VimCommandAction {
   public InsertExitModeAction() {
     super(new EditorActionHandlerBase() {
       public boolean execute(@NotNull Editor editor, @NotNull DataContext context, @NotNull Command cmd) {
-        VimPlugin.getChange().processEscape(InjectedLanguageUtil.getTopLevelEditor(editor), context);
+        VimPlugin.getChange().processEscape(EditorWindow.getTopLevelEditor(editor), context);
         return true;
       }
     });
@@ -65,6 +65,6 @@ public class InsertExitModeAction extends VimCommandAction {
 
   @NotNull
   public static VimCommandAction getInstance() {
-    return (VimCommandAction)ActionManager.getInstance().getAction(ACTION_ID);
+    return (VimCommandAction) ActionManager.getInstance().getAction(ACTION_ID);
   }
 }

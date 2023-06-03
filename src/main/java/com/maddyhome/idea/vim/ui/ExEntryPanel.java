@@ -18,14 +18,14 @@
 
 package com.maddyhome.idea.vim.ui;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.ui.DocumentAdapter;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.logging.Logger;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.TextAttributes;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 import com.maddyhome.idea.vim.common.TextRange;
 import com.maddyhome.idea.vim.group.MotionGroup;
 import com.maddyhome.idea.vim.group.SearchGroup;

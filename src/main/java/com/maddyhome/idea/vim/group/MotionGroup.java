@@ -17,47 +17,12 @@
  */
 package com.maddyhome.idea.vim.group;
 
-import java.awt.event.MouseEvent;
-import java.io.File;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.VisualPosition;
-import com.intellij.openapi.editor.event.EditorFactoryAdapter;
-import com.intellij.openapi.editor.event.EditorFactoryEvent;
-import com.intellij.openapi.editor.event.EditorMouseEvent;
-import com.intellij.openapi.editor.event.EditorMouseEventArea;
-import com.intellij.openapi.editor.event.EditorMouseListener;
-import com.intellij.openapi.editor.event.EditorMouseMotionListener;
-import com.intellij.openapi.editor.event.SelectionEvent;
-import com.intellij.openapi.editor.event.SelectionListener;
-import com.intellij.openapi.editor.ex.util.EditorUtil;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManagerAdapter;
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
-import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.fileEditor.impl.DesktopEditorWindow;
-import com.intellij.openapi.fileEditor.impl.EditorTabbedContainer;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.maddyhome.idea.vim.EventFacade;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.action.motion.MotionEditorAction;
 import com.maddyhome.idea.vim.action.motion.TextObjectAction;
-import com.maddyhome.idea.vim.command.Argument;
-import com.maddyhome.idea.vim.command.Command;
-import com.maddyhome.idea.vim.command.CommandState;
-import com.maddyhome.idea.vim.command.MappingMode;
-import com.maddyhome.idea.vim.command.SelectionType;
-import com.maddyhome.idea.vim.command.VisualChange;
+import com.maddyhome.idea.vim.command.*;
 import com.maddyhome.idea.vim.common.Jump;
 import com.maddyhome.idea.vim.common.Mark;
 import com.maddyhome.idea.vim.common.TextRange;
@@ -69,7 +34,24 @@ import com.maddyhome.idea.vim.option.BoundStringOption;
 import com.maddyhome.idea.vim.option.NumberOption;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.ExEntryPanel;
-import consulo.fileEditor.impl.EditorWindow;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.*;
+import consulo.codeEditor.event.*;
+import consulo.dataContext.DataContext;
+import consulo.fileEditor.FileEditor;
+import consulo.fileEditor.FileEditorTabbedContainer;
+import consulo.fileEditor.FileEditorWindow;
+import consulo.fileEditor.TextEditor;
+import consulo.fileEditor.event.FileEditorManagerAdapter;
+import consulo.fileEditor.event.FileEditorManagerEvent;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.awt.event.MouseEvent;
+import java.io.File;
 
 /**
  * This handles all motion related commands and marks
@@ -1098,9 +1080,15 @@ public class MotionGroup {
 
   public int moveCaretToLineEnd(@NotNull Editor editor) {
     final VisualPosition visualPosition = editor.getCaretModel().getVisualPosition();
-    final int lastVisualLineColumn = EditorUtil.getLastVisualLineColumnNumber(editor, visualPosition.line);
+    final int lastVisualLineColumn = getLastVisualLineColumnNumber(editor, visualPosition.line);
     final VisualPosition visualEndOfLine = new VisualPosition(visualPosition.line, lastVisualLineColumn, true);
     return moveCaretToLineEnd(editor, editor.visualToLogicalPosition(visualEndOfLine).line, true);
+  }
+
+  private static int getLastVisualLineColumnNumber(@Nonnull Editor editor, final int line) {
+    LogicalPosition lineEndPosition = editor.visualToLogicalPosition(new VisualPosition(line, Integer.MAX_VALUE));
+    int lineEndOffset = editor.logicalPositionToOffset(lineEndPosition);
+    return editor.offsetToVisualPosition(lineEndOffset, true, true).column;
   }
 
   public int moveCaretToLineEnd(@NotNull Editor editor, int line, boolean allowPastEnd) {
@@ -1269,9 +1257,9 @@ public class MotionGroup {
   /**
    * If 'absolute' is true, then set tab index to 'value', otherwise add 'value' to tab index with wraparound.
    */
-   private void switchEditorTab(@Nullable EditorWindow editorWindow, int value, boolean absolute) {
+   private void switchEditorTab(@Nullable FileEditorWindow editorWindow, int value, boolean absolute) {
     if (editorWindow != null) {
-      final EditorTabbedContainer tabbedPane = ((DesktopEditorWindow)editorWindow).getTabbedPane();
+      final FileEditorTabbedContainer tabbedPane = editorWindow.getContainer();
       if (tabbedPane != null) {
         if (absolute) {
           tabbedPane.setSelectedIndex(value);
@@ -1285,13 +1273,13 @@ public class MotionGroup {
   }
 
   public int moveCaretGotoPreviousTab(@NotNull Editor editor, @NotNull DataContext context, int rawCount) {
-    switchEditorTab(context.getData(EditorWindow.DATA_KEY), rawCount >= 1 ? -rawCount : -1, false);
+    switchEditorTab(context.getData(FileEditorWindow.DATA_KEY), rawCount >= 1 ? -rawCount : -1, false);
     return editor.getCaretModel().getOffset();
   }
 
   public int moveCaretGotoNextTab(@NotNull Editor editor, @NotNull DataContext context, int rawCount) {
     final boolean absolute = rawCount >= 1;
-    switchEditorTab(context.getData(EditorWindow.DATA_KEY), absolute ? rawCount - 1 : 1, absolute);
+    switchEditorTab(context.getData(FileEditorWindow.DATA_KEY), absolute ? rawCount - 1 : 1, absolute);
     return editor.getCaretModel().getOffset();
   }
 
@@ -1301,7 +1289,7 @@ public class MotionGroup {
   }
 
   public static void scrollPositionIntoView(@NotNull Editor editor, @NotNull VisualPosition position,
-                                             boolean scrollJump) {
+                                            boolean scrollJump) {
     final int line = position.line;
     final int column = position.column;
     final int topLine = EditorHelper.getVisualLineAtTopOfScreen(editor);
@@ -1755,7 +1743,7 @@ public class MotionGroup {
       myMakingChanges = true;
       try {
         final Editor editor = selectionEvent.getEditor();
-        final com.intellij.openapi.util.TextRange newRange = selectionEvent.getNewRange();
+        final consulo.document.util.TextRange newRange = selectionEvent.getNewRange();
         for (Editor e : EditorFactory.getInstance().getEditors(editor.getDocument())) {
           if (!e.equals(editor)) {
             e.getSelectionModel().setSelection(newRange.getStartOffset(), newRange.getEndOffset());

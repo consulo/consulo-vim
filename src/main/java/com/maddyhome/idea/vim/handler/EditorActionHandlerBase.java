@@ -18,21 +18,21 @@
 
 package com.maddyhome.idea.vim.handler;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.command.Command;
 import com.maddyhome.idea.vim.command.CommandState;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.inject.EditorWindow;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 /**
  */
 public abstract class EditorActionHandlerBase extends EditorActionHandler {
   public final void execute(@NotNull Editor editor, @NotNull DataContext context) {
-    editor = InjectedLanguageUtil.getTopLevelEditor(editor);
+    editor = EditorWindow.getTopLevelEditor(editor);
     logger.debug("execute");
 
     if (!VimPlugin.isEnabled()) {

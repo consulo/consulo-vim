@@ -17,15 +17,14 @@
  */
 package com.maddyhome.idea.vim.option;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.extensions.Extensions;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.ex.ExOutputModel;
 import com.maddyhome.idea.vim.extension.VimExtension;
 import com.maddyhome.idea.vim.helper.EditorHelper;
 import com.maddyhome.idea.vim.helper.MessageHelper;
 import com.maddyhome.idea.vim.helper.Msg;
+import consulo.codeEditor.Editor;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -476,13 +475,13 @@ public class Options {
   }
 
   private void registerExtensionOptions() {
-    for (VimExtension extension : Extensions.getExtensions(VimExtension.EP_NAME)) {
+    for (VimExtension extension : VimExtension.EP_NAME.getExtensionList()) {
       final String name = extension.getName();
       final ToggleOption option = new ToggleOption(name, name, false);
       option.addOptionChangeListener(new OptionChangeListener() {
         @Override
         public void valueChange(OptionChangeEvent event) {
-          for (VimExtension extension : Extensions.getExtensions(VimExtension.EP_NAME)) {
+          for (VimExtension extension : VimExtension.EP_NAME.getExtensionList()) {
             if (name.equals(extension.getName())) {
               if (Options.getInstance().isSet(name)) {
                 extension.init();

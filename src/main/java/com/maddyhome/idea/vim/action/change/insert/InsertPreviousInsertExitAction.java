@@ -18,12 +18,12 @@
 
 package com.maddyhome.idea.vim.action.change.insert;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorAction;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.maddyhome.idea.vim.VimPlugin;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorAction;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.inject.EditorWindow;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,7 +35,7 @@ public class InsertPreviousInsertExitAction extends EditorAction {
 
   private static class Handler extends EditorActionHandler {
     public void execute(@NotNull Editor editor, @NotNull DataContext context) {
-      VimPlugin.getChange().insertPreviousInsert(InjectedLanguageUtil.getTopLevelEditor(editor), context, true);
+      VimPlugin.getChange().insertPreviousInsert(EditorWindow.getTopLevelEditor(editor), context, true);
     }
   }
 }

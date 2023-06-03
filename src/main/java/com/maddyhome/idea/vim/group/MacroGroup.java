@@ -18,11 +18,11 @@
 
 package com.maddyhome.idea.vim.group;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.logging.Logger;
+import consulo.undoRedo.CommandProcessor;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.common.Register;

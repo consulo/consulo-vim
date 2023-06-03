@@ -1,7 +1,7 @@
 package org.jetbrains.plugins.ideavim.action;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.VisualPosition;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.VisualPosition;
 import com.maddyhome.idea.vim.VimPlugin;
 import org.jetbrains.plugins.ideavim.VimTestCase;
 

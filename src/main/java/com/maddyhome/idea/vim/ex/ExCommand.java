@@ -18,9 +18,9 @@
 
 package com.maddyhome.idea.vim.ex;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.logging.Logger;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.common.TextRange;
 import org.jetbrains.annotations.NotNull;
 

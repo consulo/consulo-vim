@@ -19,19 +19,16 @@
 package com.maddyhome.idea.vim.group;
 
 import com.google.common.collect.ImmutableList;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.action.motion.mark.MotionGotoFileMarkAction;
 import com.maddyhome.idea.vim.action.motion.search.SearchAgainNextAction;
 import com.maddyhome.idea.vim.action.motion.search.SearchAgainPreviousAction;
 import com.maddyhome.idea.vim.action.motion.search.SearchEntryFwdAction;
 import com.maddyhome.idea.vim.action.motion.search.SearchEntryRevAction;
-import com.maddyhome.idea.vim.action.motion.text.*;
+import com.maddyhome.idea.vim.action.motion.text.MotionParagraphNextAction;
+import com.maddyhome.idea.vim.action.motion.text.MotionParagraphPreviousAction;
+import com.maddyhome.idea.vim.action.motion.text.MotionSentenceNextStartAction;
+import com.maddyhome.idea.vim.action.motion.text.MotionSentencePreviousStartAction;
 import com.maddyhome.idea.vim.action.motion.updown.MotionPercentOrMatchAction;
 import com.maddyhome.idea.vim.command.Argument;
 import com.maddyhome.idea.vim.command.Command;
@@ -46,6 +43,11 @@ import com.maddyhome.idea.vim.option.OptionChangeEvent;
 import com.maddyhome.idea.vim.option.OptionChangeListener;
 import com.maddyhome.idea.vim.option.Options;
 import com.maddyhome.idea.vim.ui.ClipboardHandler;
+import consulo.codeEditor.Editor;
+import consulo.logging.Logger;
+import consulo.ui.ex.action.AnAction;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -441,12 +443,7 @@ public class RegisterGroup {
   @NotNull
   private SelectionType guessSelectionType(@NotNull String text) {
     final String[] lines = StringUtil.splitByLines(text);
-    final HashSet<Integer> lengths = new HashSet<Integer>(ContainerUtil.map(lines, new Function<String, Integer>() {
-      @Override
-      public Integer fun(String s) {
-        return s.length();
-      }
-    }));
+    final HashSet<Integer> lengths = new HashSet<Integer>(ContainerUtil.map(lines, String::length));
     if (lines.length > 1 && lengths.size() == 1) {
       return SelectionType.BLOCK_WISE;
     }

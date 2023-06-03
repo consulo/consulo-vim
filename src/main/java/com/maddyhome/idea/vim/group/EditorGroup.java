@@ -18,14 +18,22 @@
 
 package com.maddyhome.idea.vim.group;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.*;
-import com.intellij.openapi.editor.colors.EditorColorKey;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorFontType;
-import com.intellij.openapi.editor.event.*;
-import com.intellij.openapi.editor.ex.EditorEx;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorFactory;
+import consulo.codeEditor.EditorGutter;
+import consulo.codeEditor.EditorSettings;
+import consulo.codeEditor.TextAnnotationGutterProvider;
+import consulo.codeEditor.event.CaretAdapter;
+import consulo.codeEditor.event.CaretEvent;
+import consulo.codeEditor.event.CaretListener;
+import consulo.codeEditor.event.EditorFactoryAdapter;
+import consulo.codeEditor.event.EditorFactoryEvent;
+import consulo.ui.ex.action.AnAction;
+import consulo.colorScheme.EditorColorKey;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorFontType;
+import consulo.codeEditor.EditorEx;
 import com.maddyhome.idea.vim.EventFacade;
 import com.maddyhome.idea.vim.KeyHandler;
 import com.maddyhome.idea.vim.VimPlugin;

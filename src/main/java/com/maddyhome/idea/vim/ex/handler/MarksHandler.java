@@ -18,9 +18,9 @@
 
 package com.maddyhome.idea.vim.ex.handler;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.virtualFileSystem.VirtualFile;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.common.Mark;
 import com.maddyhome.idea.vim.ex.*;

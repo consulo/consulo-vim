@@ -18,8 +18,8 @@
 
 package com.maddyhome.idea.vim.ex.handler;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
 import com.maddyhome.idea.vim.ex.*;
 import com.maddyhome.idea.vim.ex.vimscript.VimScriptCommandHandler;
 import com.maddyhome.idea.vim.ex.vimscript.VimScriptParser;

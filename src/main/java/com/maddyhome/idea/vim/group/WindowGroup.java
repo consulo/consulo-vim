@@ -18,45 +18,40 @@
 
 package com.maddyhome.idea.vim.group;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
+import com.maddyhome.idea.vim.VimPlugin;
+import consulo.dataContext.DataContext;
+import consulo.fileEditor.FileEditorManager;
+import consulo.fileEditor.FileEditorWindow;
+import consulo.fileEditor.FileEditorWithProviderComposite;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import javax.swing.SwingConstants;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
-import com.intellij.openapi.fileEditor.impl.DesktopEditorWithProviderComposite;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.maddyhome.idea.vim.VimPlugin;
-import consulo.fileEditor.impl.EditorWindow;
-import consulo.fileEditor.impl.EditorWithProviderComposite;
 
 public class WindowGroup {
   public WindowGroup() {
   }
 
   public void closeCurrentWindow(@NotNull DataContext context) {
-    final FileEditorManagerEx fileEditorManager = getFileEditorManager(context);
-    final EditorWindow window = fileEditorManager.getSplitters().getCurrentWindow();
+    final @NotNull FileEditorManager fileEditorManager = getFileEditorManager(context);
+    final FileEditorWindow window = fileEditorManager.getSplitters().getCurrentWindow();
     if (window != null) {
       window.closeAllExcept(null);
     }
   }
 
   public void closeAllExceptCurrent(@NotNull DataContext context) {
-    final FileEditorManagerEx fileEditorManager = getFileEditorManager(context);
-    final EditorWindow current = fileEditorManager.getCurrentWindow();
-    for (final EditorWindow window : fileEditorManager.getWindows()) {
+    final @NotNull FileEditorManager fileEditorManager = getFileEditorManager(context);
+    final FileEditorWindow current = fileEditorManager.getCurrentWindow();
+    for (final FileEditorWindow window : fileEditorManager.getWindows()) {
       if (window != current) {
         window.closeAllExcept(null);
       }
@@ -64,24 +59,24 @@ public class WindowGroup {
   }
 
   public void selectNextWindow(@NotNull DataContext context) {
-    final FileEditorManagerEx fileEditorManager = getFileEditorManager(context);
-    final EditorWindow current = fileEditorManager.getCurrentWindow();
+    final @NotNull FileEditorManager fileEditorManager = getFileEditorManager(context);
+    final FileEditorWindow current = fileEditorManager.getCurrentWindow();
     if (current != null) {
       fileEditorManager.getNextWindow(current).setAsCurrentWindow(true);
     }
   }
 
   public void selectPreviousWindow(@NotNull DataContext context) {
-    final FileEditorManagerEx fileEditorManager = getFileEditorManager(context);
-    final EditorWindow current = fileEditorManager.getCurrentWindow();
+    final @NotNull FileEditorManager fileEditorManager = getFileEditorManager(context);
+    final FileEditorWindow current = fileEditorManager.getCurrentWindow();
     if (current != null) {
       fileEditorManager.getPrevWindow(current).setAsCurrentWindow(true);
     }
   }
 
   public void selectWindow(@NotNull DataContext context, int index) {
-    final FileEditorManagerEx fileEditorManager = getFileEditorManager(context);
-    final EditorWindow[] windows = fileEditorManager.getWindows();
+    final @NotNull FileEditorManager fileEditorManager = getFileEditorManager(context);
+    final FileEditorWindow[] windows = fileEditorManager.getWindows();
     if (index - 1 < windows.length) {
       windows[index - 1].setAsCurrentWindow(true);
     }
@@ -96,16 +91,16 @@ public class WindowGroup {
   }
 
   public void selectWindowInRow(@NotNull DataContext context, int relativePosition, boolean vertical) {
-    final FileEditorManagerEx fileEditorManager = getFileEditorManager(context);
-    final EditorWindow currentWindow = fileEditorManager.getCurrentWindow();
+    final @NotNull FileEditorManager fileEditorManager = getFileEditorManager(context);
+    final FileEditorWindow currentWindow = fileEditorManager.getCurrentWindow();
     if (currentWindow != null) {
-      final EditorWindow[] windows = fileEditorManager.getWindows();
-      final List<EditorWindow> row = findWindowsInRow(currentWindow, Arrays.asList(windows), vertical);
+      final FileEditorWindow[] windows = fileEditorManager.getWindows();
+      final List<FileEditorWindow> row = findWindowsInRow(currentWindow, Arrays.asList(windows), vertical);
       selectWindow(currentWindow, row, relativePosition);
     }
   }
 
-  private void selectWindow(@NotNull EditorWindow currentWindow, @NotNull List<EditorWindow> windows,
+  private void selectWindow(@NotNull FileEditorWindow currentWindow, @NotNull List<FileEditorWindow> windows,
                             int relativePosition) {
     final int pos = windows.indexOf(currentWindow);
     final int selected = pos + relativePosition;
@@ -114,13 +109,13 @@ public class WindowGroup {
   }
 
   @NotNull
-  private static List<EditorWindow> findWindowsInRow(@NotNull EditorWindow anchor,
-                                                     @NotNull List<EditorWindow> windows, final boolean vertical) {
+  private static List<FileEditorWindow> findWindowsInRow(@NotNull FileEditorWindow anchor,
+                                                     @NotNull List<FileEditorWindow> windows, final boolean vertical) {
     final Rectangle anchorRect = getEditorWindowRectangle(anchor);
     if (anchorRect != null) {
-      final List<EditorWindow> result = new ArrayList<EditorWindow>();
+      final List<FileEditorWindow> result = new ArrayList<FileEditorWindow>();
       final double coord = vertical ? anchorRect.getX() : anchorRect.getY();
-      for (EditorWindow window : windows) {
+      for (FileEditorWindow window : windows) {
         final Rectangle rect = getEditorWindowRectangle(window);
         if (rect != null) {
           final double min = vertical ? rect.getX() : rect.getY();
@@ -130,17 +125,14 @@ public class WindowGroup {
           }
         }
       }
-      Collections.sort(result, new Comparator<EditorWindow>() {
-        @Override
-        public int compare(EditorWindow window1, EditorWindow window2) {
-          final Rectangle rect1 = getEditorWindowRectangle(window1);
-          final Rectangle rect2 = getEditorWindowRectangle(window2);
-          if (rect1 != null && rect2 != null) {
-            final double diff = vertical ? (rect1.getY() - rect2.getY()) : (rect1.getX() - rect2.getX());
-            return diff < 0 ? -1 : diff > 0 ? 1 : 0;
-          }
-          return 0;
+      Collections.sort(result, (window1, window2) -> {
+        final Rectangle rect1 = getEditorWindowRectangle(window1);
+        final Rectangle rect2 = getEditorWindowRectangle(window2);
+        if (rect1 != null && rect2 != null) {
+          final double diff = vertical ? (rect1.getY() - rect2.getY()) : (rect1.getX() - rect2.getX());
+          return diff < 0 ? -1 : diff > 0 ? 1 : 0;
         }
+        return 0;
       });
       return result;
     }
@@ -148,14 +140,14 @@ public class WindowGroup {
   }
 
   @NotNull
-  private static FileEditorManagerEx getFileEditorManager(@NotNull DataContext context) {
+  private static FileEditorManager getFileEditorManager(@NotNull DataContext context) {
     final Project project = context.getData(PlatformDataKeys.PROJECT);
-    return FileEditorManagerEx.getInstanceEx(project);
+    return FileEditorManager.getInstance(project);
   }
 
   private void splitWindow(int orientation, @NotNull DataContext context, @NotNull String filename) {
     final Project project = context.getData(PlatformDataKeys.PROJECT);
-    final FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
+    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
 
     VirtualFile virtualFile = null;
     if (filename.length() > 0 && project != null) {
@@ -166,18 +158,18 @@ public class WindowGroup {
       }
     }
 
-    final EditorWindow editorWindow = fileEditorManager.getSplitters().getCurrentWindow();
+    final FileEditorWindow editorWindow = fileEditorManager.getSplitters().getCurrentWindow();
     if (editorWindow != null) {
       editorWindow.split(orientation, true, virtualFile, true);
     }
   }
 
   @Nullable
-  private static Rectangle getEditorWindowRectangle(@NotNull EditorWindow window) {
-    final EditorWithProviderComposite editor = window.getSelectedEditor();
+  private static Rectangle getEditorWindowRectangle(@NotNull FileEditorWindow window) {
+    final FileEditorWithProviderComposite editor = window.getSelectedEditor();
     if (editor != null) {
-      final Point point = ((DesktopEditorWithProviderComposite)editor).getComponent().getLocationOnScreen();
-      final Dimension dimension = ((DesktopEditorWithProviderComposite)editor).getComponent().getSize();
+      final Point point = ((FileEditorWithProviderComposite)editor).getComponent().getLocationOnScreen();
+      final Dimension dimension = ((FileEditorWithProviderComposite)editor).getComponent().getSize();
       return new Rectangle(point, dimension);
     }
     return null;

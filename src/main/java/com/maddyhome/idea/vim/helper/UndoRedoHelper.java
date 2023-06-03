@@ -18,11 +18,13 @@
 
 package com.maddyhome.idea.vim.helper;
 
+import consulo.fileEditor.FileEditor;
+import consulo.project.Project;
+import consulo.undoRedo.ProjectUndoManager;
+import consulo.undoRedo.UndoManager;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.PlatformDataKeys;
 
 /**
  * @author oleg
@@ -32,7 +34,7 @@ public class UndoRedoHelper {
   public static boolean undo(@NotNull final DataContext context) {
     final Project project = context.getData(PlatformDataKeys.PROJECT);
     final FileEditor fileEditor = context.getData(PlatformDataKeys.FILE_EDITOR);
-    final com.intellij.openapi.command.undo.UndoManager undoManager = com.intellij.openapi.command.undo.UndoManager.getInstance(project);
+    final UndoManager undoManager = ProjectUndoManager.getInstance(project);
     if (fileEditor != null && undoManager.isUndoAvailable(fileEditor)) {
       undoManager.undo(fileEditor);
       return true;
@@ -43,7 +45,7 @@ public class UndoRedoHelper {
   public static boolean redo(@NotNull final DataContext context) {
     final Project project = context.getData(PlatformDataKeys.PROJECT);
     final FileEditor fileEditor = context.getData(PlatformDataKeys.FILE_EDITOR);
-    final com.intellij.openapi.command.undo.UndoManager undoManager = com.intellij.openapi.command.undo.UndoManager.getInstance(project);
+    final UndoManager undoManager = ProjectUndoManager.getInstance(project);
     if (fileEditor != null && undoManager.isRedoAvailable(fileEditor)) {
       undoManager.redo(fileEditor);
       return true;

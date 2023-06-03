@@ -18,13 +18,13 @@
 
 package com.maddyhome.idea.vim.ui;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorFontType;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.EditorFontType;
 import com.maddyhome.idea.vim.VimPlugin;
 import com.maddyhome.idea.vim.group.HistoryGroup;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

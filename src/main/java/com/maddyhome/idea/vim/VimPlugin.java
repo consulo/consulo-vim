@@ -37,7 +37,10 @@ import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.disposer.Disposable;
 import consulo.ide.setting.ShowSettingsUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.project.event.ProjectManagerAdapter;
@@ -48,6 +51,7 @@ import consulo.project.ui.notification.event.NotificationListener;
 import consulo.project.ui.wm.StatusBar;
 import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.keymap.Keymap;
 import consulo.ui.ex.keymap.KeymapManager;
@@ -399,6 +403,11 @@ public class VimPlugin implements PersistentStateComponent<Element>, Disposable 
                     keymap = manager.getKeymap(manager.getDefaultKeymap().getName());
                 }
                 assert keymap != null : "Default keymap not found";
+                LocalizeValue settingsText =
+                  Platform.current().os().isMac() ? CommonLocalize.actionSettingsMac() : CommonLocalize.actionSettings();
+
+                settingsText = settingsText.map(Presentation.NO_MNEMONIC);
+
                 new Notification(
                   VimPlugin.IDEAVIM_STICKY_NOTIFICATION_ID,
                   VimPlugin.IDEAVIM_NOTIFICATION_TITLE,
@@ -407,7 +416,7 @@ public class VimPlugin implements PersistentStateComponent<Element>, Disposable 
                                   "Now it is possible to set up:<br/>" +
                                   "<ul>" +
                                   "<li>Vim keys in your ~/.consulovimrc file using key mapping commands</li>" +
-                                  "<li>IDE action shortcuts in \"File | " + ShowSettingsUtil.getSettingsMenuName() + " | Keymap\"</li>" +
+                                  "<li>IDE action shortcuts in \"File | " + settingsText.get() + " | Keymap\"</li>" +
                                   "<li>Vim or IDE handlers for conflicting shortcuts in <a href='#settings'>Vim Emulation</a> settings</li>" +
                                   "</ul>", keymap.getPresentableName()),
                   NotificationType.INFORMATION,

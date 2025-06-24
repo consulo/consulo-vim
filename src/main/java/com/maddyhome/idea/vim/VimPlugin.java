@@ -42,14 +42,11 @@ import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
-import consulo.project.ProjectManager;
 import consulo.project.event.ProjectManagerAdapter;
 import consulo.project.ui.notification.Notification;
 import consulo.project.ui.notification.NotificationGroup;
 import consulo.project.ui.notification.NotificationType;
 import consulo.project.ui.notification.event.NotificationListener;
-import consulo.project.ui.wm.StatusBar;
-import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
@@ -340,19 +337,7 @@ public class VimPlugin implements PersistentStateComponent<Element>, Disposable 
     }
 
     public static void showMessage(@Nullable String msg) {
-        ProjectManager pm = ProjectManager.getInstance();
-        Project[] projects = pm.getOpenProjects();
-        for (Project project : projects) {
-            StatusBar bar = WindowManager.getInstance().getStatusBar(project);
-            if (bar != null) {
-                if (msg == null || msg.length() == 0) {
-                    bar.setInfo("");
-                }
-                else {
-                    bar.setInfo("VIM - " + msg);
-                }
-            }
-        }
+        // not supported status bar info
     }
 
     @NotNull

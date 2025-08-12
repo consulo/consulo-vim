@@ -24,6 +24,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.ApplicationConfigurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.StandardConfigurableIds;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.awt.IdeBorderFactory;
@@ -70,8 +71,8 @@ public class VimEmulationConfigurable implements ApplicationConfigurable {
   @NotNull
   @Nls
   @Override
-  public String getDisplayName() {
-    return "Vim Emulation";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Vim Emulation");
   }
 
   @Nullable

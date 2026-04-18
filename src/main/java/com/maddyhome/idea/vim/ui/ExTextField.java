@@ -238,7 +238,7 @@ public class ExTextField extends JTextField {
     }
 
     setCaret(caret);
-    putClientProperty("caretWidth", new Integer(width));
+    putClientProperty("caretWidth", Integer.valueOf(width));
     */
   }
 

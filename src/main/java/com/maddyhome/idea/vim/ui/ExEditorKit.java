@@ -92,7 +92,7 @@ public class ExEditorKit extends DefaultEditorKit {
         }
       }
       else {
-        return KeyStroke.getKeyStroke(new Character(ch), mods);
+        return KeyStroke.getKeyStroke(Character.valueOf(ch), mods);
       }
     }
 

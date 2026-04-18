@@ -168,7 +168,7 @@ public class RegisterGroup {
     // If this is an uppercase register, we need to append the text to the corresponding lowercase register
     if (Character.isUpperCase(register)) {
       char lreg = Character.toLowerCase(register);
-      Register r = registers.get(new Character(lreg));
+      Register r = registers.get(Character.valueOf(lreg));
       // Append the text if the lowercase register existed
       if (r != null) {
         r.addText(text);
@@ -275,7 +275,7 @@ public class RegisterGroup {
     if (Character.isUpperCase(r)) {
       r = Character.toLowerCase(r);
     }
-    return CLIPBOARD_REGISTERS.contains(r) ? refreshClipboardRegister(r) : registers.get(new Character(r));
+    return CLIPBOARD_REGISTERS.contains(r) ? refreshClipboardRegister(r) : registers.get(Character.valueOf(r));
   }
 
   /**

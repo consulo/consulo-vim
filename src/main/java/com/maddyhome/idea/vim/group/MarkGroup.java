@@ -112,18 +112,18 @@ public class MarkGroup {
     else if (FILE_MARKS.indexOf(ch) >= 0) {
       final HashMap fmarks = getFileMarks(editor.getDocument());
       if (fmarks != null) {
-        mark = (Mark)fmarks.get(new Character(ch));
+        mark = (Mark)fmarks.get(Character.valueOf(ch));
         if (mark != null && mark.isClear()) {
-          fmarks.remove(new Character(ch));
+          fmarks.remove(Character.valueOf(ch));
           mark = null;
         }
       }
     }
     // This is a mark from another file
     else if (GLOBAL_MARKS.indexOf(ch) >= 0) {
-      mark = globalMarks.get(new Character(ch));
+      mark = globalMarks.get(Character.valueOf(ch));
       if (mark != null && mark.isClear()) {
-        globalMarks.remove(new Character(ch));
+        globalMarks.remove(Character.valueOf(ch));
         mark = null;
       }
     }
@@ -163,9 +163,9 @@ public class MarkGroup {
     if (fmarks == null) {
       return null;
     }
-    Mark mark = (Mark)fmarks.get(new Character(ch));
+    Mark mark = (Mark)fmarks.get(Character.valueOf(ch));
     if (mark != null && mark.isClear()) {
-      fmarks.remove(new Character(ch));
+      fmarks.remove(Character.valueOf(ch));
       mark = null;
     }
 
@@ -296,10 +296,10 @@ public class MarkGroup {
   private void removeMark(char ch, @NotNull Mark mark) {
     if (FILE_MARKS.indexOf(ch) >= 0) {
       HashMap fmarks = getFileMarks(mark.getFilename());
-      fmarks.remove(new Character(ch));
+      fmarks.remove(Character.valueOf(ch));
     }
     else if (GLOBAL_MARKS.indexOf(ch) >= 0) {
-      globalMarks.remove(new Character(ch));
+      globalMarks.remove(Character.valueOf(ch));
     }
 
     mark.clear();
